@@ -544,11 +544,12 @@ document.getElementById('chartBtn').addEventListener('click', () => {
       ctx.fillRect(x,stackY,barW,segH);
 
       // Número dentro do segmento
-      if (segH>=14 && barW>=24) {
-        ctx.fillStyle='rgba(255,255,255,0.92)';
-        ctx.font=`bold ${Math.min(10,barW/3.5)}px Arial`;
-        ctx.textAlign='center';
-        ctx.fillText(v, x+barW/2, stackY+segH/2+4);
+      if (segH >= 11) {
+        const fs = Math.min(10, Math.max(7, segH * 0.55), barW / 2.5);
+        ctx.fillStyle = 'rgba(255,255,255,0.95)';
+        ctx.font = `bold ${fs}px Arial`;
+        ctx.textAlign = 'center';
+        ctx.fillText(v, x + barW / 2, stackY + segH / 2 + fs * 0.38);
       }
       ctx.strokeStyle='rgba(255,255,255,0.3)'; ctx.lineWidth=0.5;
       ctx.strokeRect(x,stackY,barW,segH);
