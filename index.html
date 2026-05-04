@@ -18,11 +18,6 @@
     --header-bg: #1e3a5f;
     --header-text: #ffffff;
     --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    --total-high: #c0392b;
-    --total-med-high: #e67e22;
-    --total-med: #f1c40f;
-    --total-low: #27ae60;
-    --total-very-low: #2ecc71;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; }
@@ -46,28 +41,26 @@
   .app-header h1 { font-size: 20px; font-weight: 600; letter-spacing: -0.3px; }
   .app-header p { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 2px; }
 
-  .main { max-width: 1400px; margin: 0 auto; padding: 24px 24px 48px; }
+  .main { max-width: 1600px; margin: 0 auto; padding: 24px 24px 48px; }
 
   .upload-section {
     background: var(--card);
     border: 1.5px dashed var(--border-strong);
     border-radius: 12px;
-    padding: 32px;
+    padding: 28px 32px;
     text-align: center;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     transition: border-color 0.2s, background 0.2s;
   }
   .upload-section.dragover { border-color: var(--accent); background: var(--accent-light); }
-  .upload-section h2 { font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
-  .upload-section p { font-size: 14px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; }
+  .upload-section h2 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+  .upload-section p { font-size: 13px; color: var(--text-muted); margin-bottom: 18px; line-height: 1.6; }
+  .upload-area { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 
-  .upload-area {
-    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
-  }
   .btn {
     display: inline-flex; align-items: center; gap: 8px;
     padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 500;
-    cursor: pointer; border: 1.5px solid; transition: all 0.15s;
+    cursor: pointer; border: 1.5px solid; transition: all 0.15s; font-family: var(--font);
   }
   .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
   .btn-primary:hover { background: #153d6a; }
@@ -81,136 +74,95 @@
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 24px;
-    margin-bottom: 24px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
   }
-  .paste-section h2 { font-size: 15px; font-weight: 600; margin-bottom: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-size: 11px; }
+  .paste-section h2 { font-size: 11px; font-weight: 600; margin-bottom: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
   .paste-area {
-    width: 100%; min-height: 120px; padding: 12px;
+    width: 100%; min-height: 140px; padding: 12px;
     border: 1px solid var(--border); border-radius: 8px;
     font-family: 'Courier New', monospace; font-size: 12px;
-    resize: vertical; background: #fafaf8; color: var(--text);
-    outline: none;
+    resize: vertical; background: #fafaf8; color: var(--text); outline: none;
   }
   .paste-area:focus { border-color: var(--accent); }
   .paste-controls { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; align-items: center; }
-  .month-selector { display: flex; align-items: center; gap: 8px; }
-  .month-selector label { font-size: 13px; color: var(--text-muted); }
-  .month-selector input { padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; font-family: var(--font); }
 
   .status-bar {
     background: #e8f4e8; border: 1px solid #4caf50; border-radius: 8px;
-    padding: 10px 16px; margin-bottom: 16px; font-size: 13px; color: #2e7d32;
-    display: none;
+    padding: 10px 16px; margin-bottom: 16px; font-size: 13px; color: #2e7d32; display: none;
   }
   .status-bar.error { background: #fdecea; border-color: #f44336; color: #c62828; }
   .status-bar.visible { display: block; }
 
   .forecast-header {
     display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 16px; flex-wrap: wrap; gap: 12px;
+    margin-bottom: 14px; flex-wrap: wrap; gap: 12px;
   }
-  .forecast-title { font-size: 20px; font-weight: 700; color: var(--header-bg); }
+  .forecast-title { font-size: 19px; font-weight: 700; color: var(--header-bg); }
   .forecast-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
-
-  .legend {
-    display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
-  }
-  .legend-item {
-    display: flex; align-items: center; gap: 5px;
-    font-size: 11px; color: var(--text-muted);
-  }
+  .legend { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-muted); }
   .legend-dot { width: 12px; height: 12px; border-radius: 2px; }
 
-  .table-wrapper {
-    overflow-x: auto;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    background: var(--card);
-    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-  }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .table-wrapper { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); background: var(--card); box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
   thead th {
-    background: var(--header-bg);
-    color: #fff;
-    padding: 10px 8px;
-    text-align: center;
-    font-weight: 600;
-    font-size: 12px;
-    white-space: nowrap;
-    border-right: 1px solid rgba(255,255,255,0.1);
+    background: var(--header-bg); color: #fff;
+    padding: 9px 6px; text-align: center; font-weight: 600; font-size: 11px;
+    white-space: nowrap; border-right: 1px solid rgba(255,255,255,0.1);
     position: sticky; top: 0; z-index: 2;
   }
-  thead th:first-child { text-align: left; padding-left: 14px; min-width: 90px; }
+  thead th:first-child { text-align: left; padding-left: 12px; min-width: 88px; }
   thead th.total-col { background: #162d4a; }
 
   tbody tr:nth-child(even) td { background: #fafaf8; }
-  tbody tr:hover td { background: #f0ede8; }
+  tbody tr:hover td { background: #f0ede8 !important; }
   tbody td {
-    padding: 7px 8px;
-    text-align: center;
-    border-right: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
+    padding: 6px 6px; text-align: center;
+    border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
     font-variant-numeric: tabular-nums;
   }
   tbody td:first-child {
-    text-align: left; padding-left: 14px;
-    font-weight: 500; font-size: 12px;
-    color: var(--text-muted);
-    white-space: nowrap;
-    background: #f7f5f0 !important;
-    border-right: 2px solid var(--border-strong);
+    text-align: left; padding-left: 12px; font-weight: 500; font-size: 11px;
+    color: var(--text-muted); white-space: nowrap;
+    background: #f7f5f0 !important; border-right: 2px solid var(--border-strong);
   }
-  tbody td.zero { color: #ccc; }
-  tbody td.value { font-weight: 500; color: var(--text); }
+  tbody td.zero { color: #ddd; }
+  tbody td.val { font-weight: 500; color: var(--text); }
 
-  .total-cell {
-    font-weight: 700; font-size: 13px;
-    border-left: 2px solid var(--border-strong);
-    min-width: 60px;
-  }
-  .total-cell.high { background: #c0392b !important; color: #fff; }
-  .total-cell.med-high { background: #e67e22 !important; color: #fff; }
-  .total-cell.med { background: #f39c12 !important; color: #fff; }
-  .total-cell.low-med { background: #f1c40f !important; color: #333; }
-  .total-cell.low { background: #2ecc71 !important; color: #fff; }
-  .total-cell.very-low { background: #27ae60 !important; color: #fff; }
+  .total-cell { font-weight: 700; font-size: 12px; border-left: 2px solid var(--border-strong); min-width: 54px; }
+  .total-cell.c-high     { background: #c0392b !important; color: #fff; }
+  .total-cell.c-medhigh  { background: #e67e22 !important; color: #fff; }
+  .total-cell.c-med      { background: #f39c12 !important; color: #fff; }
+  .total-cell.c-lowmed   { background: #f1c40f !important; color: #333; }
+  .total-cell.c-low      { background: #2ecc71 !important; color: #fff; }
+  .total-cell.c-verylow  { background: #27ae60 !important; color: #fff; }
 
   tfoot td {
-    background: #1e3a5f !important;
-    color: #fff !important;
-    font-weight: 700;
-    padding: 9px 8px;
-    text-align: center;
-    border-right: 1px solid rgba(255,255,255,0.1);
-    font-size: 13px;
+    background: #1e3a5f !important; color: #fff !important; font-weight: 700;
+    padding: 8px 6px; text-align: center;
+    border-right: 1px solid rgba(255,255,255,0.1); font-size: 12px;
   }
-  tfoot td:first-child { text-align: left; padding-left: 14px; font-size: 12px; background: #162d4a !important; }
+  tfoot td:first-child { text-align: left; padding-left: 12px; font-size: 11px; background: #162d4a !important; }
 
   .cat-legend {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 8px;
-    margin-top: 20px;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 7px; margin-top: 18px;
   }
-  .cat-item {
-    display: flex; align-items: center; gap: 10px;
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 8px; padding: 8px 12px;
-  }
-  .cat-code {
-    font-weight: 700; font-size: 13px; color: var(--header-bg);
-    min-width: 52px; background: var(--accent-light);
-    padding: 3px 6px; border-radius: 4px; text-align: center;
-  }
-  .cat-name { font-size: 13px; color: var(--text-muted); }
+  .cat-item { display: flex; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 7px 12px; }
+  .cat-code { font-weight: 700; font-size: 12px; color: var(--header-bg); min-width: 52px; background: var(--accent-light); padding: 3px 6px; border-radius: 4px; text-align: center; }
+  .cat-name { font-size: 12px; color: var(--text-muted); }
 
-  .empty-state {
-    text-align: center; padding: 60px 20px; color: var(--text-muted);
-  }
+  .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
   .empty-state .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.3; }
   .empty-state h3 { font-size: 18px; font-weight: 500; margin-bottom: 8px; color: var(--text); }
   .empty-state p { font-size: 14px; line-height: 1.6; }
+
+  .instructions {
+    background: #fff9e6; border: 1px solid #f0c040; border-radius: 10px;
+    padding: 16px 20px; margin-bottom: 20px; font-size: 13px; line-height: 1.7;
+  }
+  .instructions strong { color: #7a5500; }
 </style>
 </head>
 <body>
@@ -225,29 +177,27 @@
 
 <div class="main">
 
-  <!-- Upload HTML Opera -->
+  <div class="instructions">
+    <strong>Como usar:</strong> Abre o report do Opera no browser → selecciona todo o texto (Ctrl+A) → copia (Ctrl+C) → cola na área abaixo → clica <strong>Processar</strong>.<br>
+    Ou arrasta o ficheiro <strong>.htm</strong> directamente para a zona de upload.
+  </div>
+
   <div class="upload-section" id="dropZone">
-    <h2>Carregar Report HTML do Opera</h2>
-    <p>Arrasta o ficheiro <strong>room_type_forecast*.htm</strong> aqui, ou clica para selecionar.<br>
-    O sistema irá parsear automaticamente e gerar a tabela de forecast.</p>
+    <h2>Carregar ficheiro HTML do Opera</h2>
+    <p>Arrasta o ficheiro <strong>room_type_forecast*.htm</strong> aqui, ou clica para selecionar.</p>
     <div class="upload-area">
       <label class="btn btn-primary" for="fileInput">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
-        Selecionar ficheiro HTML
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+        Selecionar ficheiro .htm
       </label>
-      <input type="file" id="fileInput" accept=".htm,.html">
+      <input type="file" id="fileInput" accept=".htm,.html,.txt">
     </div>
   </div>
 
-  <!-- Paste mode alternativo -->
   <div class="paste-section">
-    <h2>Ou cola o conteúdo do report aqui</h2>
-    <textarea class="paste-area" id="pasteArea" placeholder="Cola aqui o conteúdo do ficheiro HTML do Opera (room_type_forecast*.htm)..."></textarea>
+    <h2>Ou cola aqui o texto do report (Ctrl+A → Ctrl+C na página do Opera → Ctrl+V aqui)</h2>
+    <textarea class="paste-area" id="pasteArea" placeholder="Cola aqui o conteúdo copiado da página do Opera (room_type_forecast*.htm)..."></textarea>
     <div class="paste-controls">
-      <div class="month-selector">
-        <label>Mês/Ano:</label>
-        <input type="month" id="monthPicker" value="2026-05">
-      </div>
       <button class="btn btn-secondary" id="parseBtn">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
         Processar
@@ -261,276 +211,227 @@
 
   <div class="status-bar" id="statusBar"></div>
 
-  <!-- Forecast Table -->
   <div id="forecastContainer">
     <div class="empty-state">
       <div class="icon">📊</div>
       <h3>Sem dados carregados</h3>
-      <p>Carrega um ficheiro HTML do Opera ou cola o conteúdo acima<br>para gerar a tabela de Room Forecast.</p>
+      <p>Cola o texto do report do Opera acima e clica Processar,<br>ou arrasta o ficheiro .htm para a zona de upload.</p>
     </div>
   </div>
 
 </div>
 
 <script>
-// ─── Categories configuration ───────────────────────────────────────────────
+// ─── Categorias conhecidas ────────────────────────────────────────────────────
 const CATEGORY_NAMES = {
-  ELET:   'Elegante Suite Twin',
-  ELED:   'Elegante Suite Double',
-  ELETC:  'Elegante Suite Twin Comunicate',
-  DELUXE: 'Deluxe Suite',
-  MASTER: 'Master Suite',
-  RV2:    'Residence Vilalara 02 Bedroom',
-  RV3:    'Residence Vilalara 03 Bedroom',
-  STO:    'Ocean Suite View TWIN',
-  STOC:   'Ocean Suite View TWIN Comunicate',
-  SDO:    'Ocean Suite View Double',
-  SDOC:   'Ocean Suite View DOUBLE Comunicate',
-  SC:     'Sala Reuniões',
-  ORV2:   'Owner Residence Vilalara 02 Bedroom',
-  RVP2:   'Resindence Vilalara Primium 02 Bedroom',
-  GRAND:  'Grand Suite, com mais de 140 m²',
-  ELEDC:  'Elegante Suite Double Comunicate',
-  RVP2M:  'Residence Vilalara Primium 02 Bedroom (Master)',
-  ONRA2:  'Ocean No Reservation Area 02 Bedroom',
+  ELET:  'Elegante Suite Twin',
+  ELED:  'Elegante Suite Double',
+  ELETC: 'Elegante Suite Twin Comunicate',
+  ELEDC: 'Elegante Suite Double Comunicate',
+  DELUXE:'Deluxe Suite',
+  MASTER:'Master Suite',
+  RV2:   'Residence Vilalara 02 Bedroom',
+  RV3:   'Residence Vilalara 03 Bedroom',
+  STO:   'Ocean Suite View TWIN',
+  STOC:  'Ocean Suite View TWIN Comunicate',
+  SDO:   'Ocean Suite View Double',
+  SDOC:  'Ocean Suite View DOUBLE Comunicate',
+  SC:    'Sala Reuniões',
+  ORV2:  'Owner Residence Vilalara 02 Bedroom',
+  RVP2:  'Resindence Vilalara Primium 02 Bedroom',
+  RVP2M: 'Residence Vilalara Primium 02 Bedroom (Master)',
+  ONRA2: 'Ocean No Reservation Area 02 Bedroom',
+  GRAND: 'Grand Suite, com mais de 140 m²',
+  STG:   'Suite Garden',
 };
 
-// Preferred column order (matching the reference Excel)
-const PREFERRED_ORDER = ['ELET','ELED','ELETC','DELUXE','MASTER','RV2','RV3','STO','STOC','SDO','SDOC','ORV2','RVP2','GRAND'];
+const PREFERRED_ORDER = ['ELET','ELED','ELETC','ELEDC','DELUXE','MASTER','RV2','RV3','STO','STOC','SDO','SDOC','ORV2','RVP2','RVP2M','GRAND','STG','SC','ONRA2'];
+
+// Palavras a ignorar nas linhas
+const SKIP_WORDS = ['hotel availability','grand total','filter','display','from date','to date','room class','room type forecast','physical','out of order','inventory','overbooking','reserved','available','page','vilalara','include','non deduct'];
 
 let currentData = null;
 
-// ─── File upload ─────────────────────────────────────────────────────────────
+// ─── Upload ficheiro ──────────────────────────────────────────────────────────
 document.getElementById('fileInput').addEventListener('change', e => {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = ev => processHTML(ev.target.result, file.name);
+  reader.onload = ev => process(ev.target.result, file.name);
   reader.readAsText(file, 'iso-8859-1');
 });
 
-// Drag & drop
 const dropZone = document.getElementById('dropZone');
 dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
 dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
 dropZone.addEventListener('drop', e => {
-  e.preventDefault();
-  dropZone.classList.remove('dragover');
+  e.preventDefault(); dropZone.classList.remove('dragover');
   const file = e.dataTransfer.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = ev => processHTML(ev.target.result, file.name);
+  reader.onload = ev => process(ev.target.result, file.name);
   reader.readAsText(file, 'iso-8859-1');
 });
 
 document.getElementById('parseBtn').addEventListener('click', () => {
-  const html = document.getElementById('pasteArea').value.trim();
-  if (!html) return showStatus('Cola o conteúdo do HTML do Opera primeiro.', true);
-  processHTML(html, 'paste');
+  const txt = document.getElementById('pasteArea').value.trim();
+  if (!txt) return showStatus('Cola o conteúdo do Opera primeiro.', true);
+  process(txt, 'paste');
 });
 
-// ─── Parse HTML Opera Room Forecast ──────────────────────────────────────────
-function processHTML(htmlContent, sourceName) {
-  try {
+// ─── Parser principal — formato Opera ────────────────────────────────────────
+// O Opera apresenta:
+//   DATE    CAT    Physical  OOO  Inventory  Overbooking  Reserved  Available
+// Cada linha tem uma categoria. A data só aparece na primeira linha do dia.
+// A coluna que nos interessa é "Reserved" (penúltima coluna numérica).
+
+function parseOpera(content) {
+  // Se for HTML, extrair texto
+  let text = content;
+  if (content.includes('<html') || content.includes('<table') || content.includes('<HTML')) {
     const parser = new DOMParser();
-    const doc = parser.parseFromString(htmlContent, 'text/html');
-
-    // Find all tables in the document
-    const tables = doc.querySelectorAll('table');
-    if (tables.length === 0) {
-      // Maybe it's raw text/CSV format — try alternative parsing
-      const data = parseTextFormat(htmlContent);
-      if (data) { renderAndStore(data); return; }
-      return showStatus('Não foi encontrada nenhuma tabela no ficheiro. Verifica o formato.', true);
-    }
-
-    // Try to find the forecast table (largest table with date-like data)
-    let bestTable = null;
-    let bestScore = 0;
-    tables.forEach(t => {
-      const text = t.textContent;
-      const score = (text.match(/\d{2}\/\d{2}\/\d{2,4}/g) || []).length +
-                    (text.match(/ELET|ELED|DELUXE|MASTER|RV2|STO|SDO/gi) || []).length;
-      if (score > bestScore) { bestScore = score; bestTable = t; }
-    });
-
-    if (!bestTable) {
-      // fallback: largest table
-      tables.forEach(t => { if (!bestTable || t.rows.length > bestTable.rows.length) bestTable = t; });
-    }
-
-    const data = parseOperaTable(bestTable);
-    if (!data || data.rows.length === 0) {
-      return showStatus('Não foi possível extrair dados da tabela. Verifica se é o ficheiro correcto do Opera.', true);
-    }
-
-    renderAndStore(data);
-    showStatus(`✓ ${data.rows.length} dias carregados com sucesso a partir de "${sourceName}".`);
-  } catch(err) {
-    showStatus('Erro ao processar o ficheiro: ' + err.message, true);
-    console.error(err);
-  }
-}
-
-function parseOperaTable(table) {
-  const rows = Array.from(table.rows);
-  if (rows.length < 2) return null;
-
-  // Find header row (contains category codes)
-  let headerRowIdx = 0;
-  let categories = [];
-  for (let i = 0; i < Math.min(5, rows.length); i++) {
-    const cells = Array.from(rows[i].cells).map(c => c.textContent.trim().toUpperCase());
-    const knownCats = cells.filter(c => CATEGORY_NAMES[c] || ['ELET','ELED','DELUXE','MASTER','STO','RV2','SDO'].some(k => c.includes(k)));
-    if (knownCats.length >= 3) {
-      headerRowIdx = i;
-      categories = cells;
-      break;
-    }
+    const doc = parser.parseFromString(content, 'text/html');
+    text = doc.body ? doc.body.innerText : content;
   }
 
-  if (categories.length === 0) {
-    // Try first row
-    categories = Array.from(rows[0].cells).map(c => c.textContent.trim().toUpperCase());
-    headerRowIdx = 0;
+  const KNOWN_CATS = new Set(Object.keys(CATEGORY_NAMES));
+  const DATE_RE = /^(\d{2})[\/\-](\d{2})[\/\-](\d{2,4})$/;
+
+  const byDate = {}; // date -> {cat: reserved}
+  const dateOrder = [];
+  let currentDate = null;
+
+  const lines = text.split('\n');
+
+  for (const rawLine of lines) {
+    // Separar por tab ou múltiplos espaços
+    const cells = rawLine.split(/\t+/).map(c => c.trim()).filter(c => c !== '');
+    if (cells.length === 0) continue;
+
+    const first = cells[0];
+    const firstLower = first.toLowerCase();
+
+    // Ignorar linhas de cabeçalho/rodapé
+    if (SKIP_WORDS.some(sw => firstLower.startsWith(sw))) continue;
+    if (firstLower.includes('availability') || firstLower.includes('grand total')) continue;
+
+    // Verificar se primeira célula é data
+    let cat = null;
+    let numCells = [];
+
+    if (DATE_RE.test(first)) {
+      // Linha com data
+      const m = DATE_RE.exec(first);
+      let d = m[1], mo = m[2], y = m[3];
+      if (y.length === 4) y = y.slice(2);
+      currentDate = `${d}/${mo}/${y}`;
+
+      if (!byDate[currentDate]) {
+        byDate[currentDate] = {};
+        dateOrder.push(currentDate);
+      }
+
+      // Pode ter categoria na mesma linha (cells[1])
+      if (cells.length >= 2 && KNOWN_CATS.has(cells[1].toUpperCase())) {
+        cat = cells[1].toUpperCase();
+        numCells = cells.slice(2).filter(c => /^\d+$/.test(c));
+      }
+    } else if (KNOWN_CATS.has(first.toUpperCase()) && currentDate) {
+      // Linha de categoria
+      cat = first.toUpperCase();
+      numCells = cells.slice(1).filter(c => /^\d+$/.test(c));
+    }
+
+    // Extrair Reserved: é a penúltima coluna numérica
+    // Formato: Physical OOO Inventory Overbooking Reserved Available
+    // = índices 0 1 2 3 4 5  → Reserved = índice 4
+    if (cat && numCells.length >= 2) {
+      let reserved = 0;
+      if (numCells.length >= 5) {
+        reserved = parseInt(numCells[4]) || 0;
+      } else if (numCells.length >= 2) {
+        // Fallback: penúltimo
+        reserved = parseInt(numCells[numCells.length - 2]) || 0;
+      }
+      byDate[currentDate][cat] = reserved;
+    }
   }
 
-  // Find date column index
-  let dateColIdx = 0;
-  categories.forEach((c, i) => { if (c === 'DATE' || c === 'DATA' || c === 'DIA' || c === '') dateColIdx = i; });
-
-  // Find TOTAL column
-  let totalColIdx = -1;
-  categories.forEach((c, i) => { if (c.includes('TOTAL') || c === 'TOTAL') totalColIdx = i; });
-
-  // Extract actual category codes (exclude date and total cols)
-  const catCols = [];
-  categories.forEach((c, i) => {
-    if (i === dateColIdx || i === totalColIdx) return;
-    if (c && c.length <= 8 && c !== 'TOTAL' && !c.includes(' ') && c !== 'DATA' && c !== 'DIA' && c !== 'DATE') {
-      catCols.push({ name: c, idx: i });
-    }
-  });
-
-  // Parse data rows
-  const dataRows = [];
-  for (let i = headerRowIdx + 1; i < rows.length; i++) {
-    const cells = Array.from(rows[i].cells).map(c => c.textContent.trim());
-    const dateStr = cells[dateColIdx] || '';
-
-    // Detect date (various formats)
-    const dateMatch = dateStr.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/);
-    if (!dateMatch) continue;
-
-    let day, month, year;
-    // Try DD/MM/YY or DD/MM/YYYY
-    day = parseInt(dateMatch[1]);
-    month = parseInt(dateMatch[2]);
-    year = parseInt(dateMatch[3]);
-    if (year < 100) year += 2000;
-
-    if (isNaN(day) || isNaN(month) || isNaN(year)) continue;
-
-    const rowData = { date: `${String(day).padStart(2,'0')}/${String(month).padStart(2,'0')}/${String(year).slice(-2)}`, values: {} };
-
-    catCols.forEach(col => {
-      const v = parseInt(cells[col.idx]) || 0;
-      rowData.values[col.name] = v;
-    });
-
-    // Calculate total
-    let total = 0;
-    if (totalColIdx >= 0 && cells[totalColIdx]) {
-      total = parseInt(cells[totalColIdx]) || 0;
-    }
-    if (total === 0) {
-      total = catCols.reduce((s, col) => s + (rowData.values[col.name] || 0), 0);
-    }
-    rowData.total = total;
-    dataRows.push(rowData);
+  if (dateOrder.length === 0) {
+    return null;
   }
 
-  // Sort categories in preferred order
-  const allCats = catCols.map(c => c.name);
-  const orderedCats = PREFERRED_ORDER.filter(c => allCats.includes(c));
+  // Descobrir todas as categorias presentes
+  const allCats = new Set();
+  dateOrder.forEach(d => Object.keys(byDate[d]).forEach(c => allCats.add(c)));
+
+  // Ordenar categorias por ordem preferida
+  const orderedCats = PREFERRED_ORDER.filter(c => allCats.has(c));
   allCats.forEach(c => { if (!orderedCats.includes(c)) orderedCats.push(c); });
 
-  return { categories: orderedCats, rows: dataRows };
+  // Remover STG e outras categorias não relevantes se quiser (deixar todas por ora)
+  const finalCats = orderedCats.filter(c => c !== 'STG'); // STG não é categoria de hóspede
+
+  // Construir rows
+  const rows = dateOrder.map(date => ({
+    date,
+    values: byDate[date],
+    total: finalCats.reduce((s, c) => s + (byDate[date][c] || 0), 0)
+  }));
+
+  return { categories: finalCats, rows };
 }
 
-function parseTextFormat(text) {
-  // Fallback: try tab/pipe delimited
-  const lines = text.split('\n').filter(l => l.trim());
-  if (lines.length < 2) return null;
-  const sep = lines[0].includes('\t') ? '\t' : '|';
-  const headers = lines[0].split(sep).map(h => h.trim().toUpperCase());
-  const rows = [];
-  for (let i = 1; i < lines.length; i++) {
-    const cells = lines[i].split(sep).map(c => c.trim());
-    if (cells.length < 2) continue;
-    const dateStr = cells[0];
-    const dateMatch = dateStr.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/);
-    if (!dateMatch) continue;
-    const rowData = { date: cells[0], values: {}, total: 0 };
-    headers.forEach((h, i) => { if (i > 0 && i < cells.length) rowData.values[h] = parseInt(cells[i]) || 0; });
-    rowData.total = Object.values(rowData.values).reduce((s, v) => s + v, 0);
-    rows.push(rowData);
+function process(content, sourceName) {
+  const data = parseOpera(content);
+  if (!data || data.rows.length === 0) {
+    return showStatus('Não foi possível extrair dados. Verifica se é o report correcto do Opera (room_type_forecast*.htm).', true);
   }
-  if (rows.length === 0) return null;
-  const cats = headers.slice(1).filter(h => h && h !== 'TOTAL' && h !== 'DIA');
-  return { categories: cats, rows };
-}
-
-// ─── Render table ─────────────────────────────────────────────────────────────
-function renderAndStore(data) {
   currentData = data;
   document.getElementById('exportBtn').style.display = '';
   renderTable(data);
+  showStatus(`✓ ${data.rows.length} dias carregados · ${data.categories.length} categorias · fonte: "${sourceName}"`);
 }
 
-function totalColor(total, max) {
-  const pct = max > 0 ? total / max : 0;
-  if (pct >= 0.9) return 'high';
-  if (pct >= 0.75) return 'med-high';
-  if (pct >= 0.60) return 'med';
-  if (pct >= 0.45) return 'low-med';
-  if (pct >= 0.25) return 'low';
-  return 'very-low';
+// ─── Render tabela ────────────────────────────────────────────────────────────
+function colorClass(total, max) {
+  const p = max > 0 ? total / max : 0;
+  if (p >= 0.90) return 'c-high';
+  if (p >= 0.75) return 'c-medhigh';
+  if (p >= 0.60) return 'c-med';
+  if (p >= 0.45) return 'c-lowmed';
+  if (p >= 0.25) return 'c-low';
+  return 'c-verylow';
 }
 
 function renderTable(data) {
-  const maxTotal = Math.max(...data.rows.map(r => r.total));
-  const container = document.getElementById('forecastContainer');
-
-  // Compute column totals
+  const { categories, rows } = data;
+  const maxTotal = Math.max(...rows.map(r => r.total), 1);
   const colTotals = {};
-  data.categories.forEach(c => { colTotals[c] = 0; });
-  data.rows.forEach(r => {
-    data.categories.forEach(c => { colTotals[c] = (colTotals[c] || 0) + (r.values[c] || 0); });
-  });
-  const grandTotal = data.rows.reduce((s, r) => s + r.total, 0);
+  categories.forEach(c => colTotals[c] = 0);
+  rows.forEach(r => categories.forEach(c => { colTotals[c] = (colTotals[c] || 0) + (r.values[c] || 0); }));
+  const grandTotal = rows.reduce((s, r) => s + r.total, 0);
 
-  // Month label from first row
-  const firstDate = data.rows[0]?.date || '';
+  const firstDate = rows[0]?.date || '';
   let monthLabel = '';
   if (firstDate) {
     const parts = firstDate.split('/');
     const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-    if (parts.length >= 2) monthLabel = `${months[parseInt(parts[1])-1]} 20${parts[2]}`;
+    monthLabel = `${months[parseInt(parts[1])-1]} 20${parts[2]}`;
   }
 
   let html = `
   <div class="forecast-header">
     <div>
       <div class="forecast-title">Room Forecast — Chegadas por Categoria</div>
-      <div class="forecast-subtitle">${monthLabel} · ${data.rows.length} dias · ${data.categories.length} categorias</div>
+      <div class="forecast-subtitle">${monthLabel} · ${rows.length} dias · ${categories.length} categorias</div>
     </div>
     <div class="legend">
-      <div class="legend-item"><div class="legend-dot" style="background:#c0392b"></div> >90%</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#e67e22"></div> 75-90%</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#f39c12"></div> 60-75%</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#f1c40f"></div> 45-60%</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#2ecc71"></div> <45%</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#c0392b"></div> &gt;90%</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#e67e22"></div> 75–90%</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#f39c12"></div> 60–75%</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#f1c40f"></div> 45–60%</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#2ecc71"></div> &lt;45%</div>
     </div>
   </div>
   <div class="table-wrapper">
@@ -538,265 +439,158 @@ function renderTable(data) {
   <thead>
     <tr>
       <th>Dia</th>
-      ${data.categories.map(c => `<th title="${CATEGORY_NAMES[c]||c}">${c}</th>`).join('')}
+      ${categories.map(c => `<th title="${CATEGORY_NAMES[c]||c}">${c}</th>`).join('')}
       <th class="total-col">TOTAL DIA</th>
     </tr>
   </thead>
   <tbody>`;
 
-  data.rows.forEach(row => {
-    const colorClass = totalColor(row.total, maxTotal);
+  rows.forEach(row => {
+    const cc = colorClass(row.total, maxTotal);
     html += `<tr>
       <td>${row.date}</td>
-      ${data.categories.map(c => {
+      ${categories.map(c => {
         const v = row.values[c] || 0;
-        return `<td class="${v === 0 ? 'zero' : 'value'}">${v === 0 ? '0' : v}</td>`;
+        return `<td class="${v === 0 ? 'zero' : 'val'}">${v || 0}</td>`;
       }).join('')}
-      <td class="total-cell ${colorClass}">${row.total}</td>
+      <td class="total-cell ${cc}">${row.total}</td>
     </tr>`;
   });
 
   html += `</tbody>
-  <tfoot>
-    <tr>
-      <td>TOTAL TYPE</td>
-      ${data.categories.map(c => `<td>${colTotals[c] || 0}</td>`).join('')}
-      <td>${grandTotal}</td>
-    </tr>
-  </tfoot>
-  </table>
-  </div>`;
+  <tfoot><tr>
+    <td>TOTAL TYPE</td>
+    ${categories.map(c => `<td>${colTotals[c] || 0}</td>`).join('')}
+    <td>${grandTotal}</td>
+  </tr></tfoot>
+  </table></div>`;
 
-  // Category legend
+  // Legenda categorias
   html += `<div class="cat-legend">`;
-  data.categories.forEach(c => {
+  categories.forEach(c => {
     if (CATEGORY_NAMES[c]) {
       html += `<div class="cat-item"><span class="cat-code">${c}</span><span class="cat-name">${CATEGORY_NAMES[c]}</span></div>`;
     }
   });
   html += `</div>`;
 
-  container.innerHTML = html;
+  document.getElementById('forecastContainer').innerHTML = html;
 }
 
 // ─── Export Excel ─────────────────────────────────────────────────────────────
-document.getElementById('exportBtn').addEventListener('click', exportExcel);
-
-function exportExcel() {
+document.getElementById('exportBtn').addEventListener('click', () => {
   if (!currentData) return;
   const { categories, rows } = currentData;
-
   const wb = XLSX.utils.book_new();
 
-  // ── Sheet 1: Rooms on the Book by TYPE ──────────────────────────────────────
-  const ws1Data = [];
-
-  // Header row
-  const header1 = ['Dia', ...categories, 'TOTAL DIA room type by day'];
-  ws1Data.push(header1);
-
-  // Data rows
-  const maxTotal = Math.max(...rows.map(r => r.total));
-  rows.forEach(row => {
-    const r = [row.date, ...categories.map(c => row.values[c] || 0), row.total];
-    ws1Data.push(r);
-  });
-
-  // Totals row
+  // Sheet 1
   const colTotals = {};
-  categories.forEach(c => { colTotals[c] = 0; });
-  rows.forEach(row => { categories.forEach(c => { colTotals[c] += row.values[c] || 0; }); });
+  categories.forEach(c => colTotals[c] = 0);
+  rows.forEach(row => categories.forEach(c => { colTotals[c] += row.values[c] || 0; }));
   const grandTotal = rows.reduce((s, r) => s + r.total, 0);
+  const maxTotal = Math.max(...rows.map(r => r.total), 1);
 
+  const ws1Data = [['Dia', ...categories, 'TOTAL DIA room type by day']];
+  rows.forEach(row => ws1Data.push([row.date, ...categories.map(c => row.values[c] || 0), row.total]));
   ws1Data.push(['TOTAL TYPE', ...categories.map(c => colTotals[c] || 0), grandTotal]);
 
   const ws1 = XLSX.utils.aoa_to_sheet(ws1Data);
+  const wscols = [{ wch: 11 }];
+  categories.forEach(() => wscols.push({ wch: 7 }));
+  wscols.push({ wch: 26 });
+  ws1['!cols'] = wscols;
 
-  // Column widths
-  const wscols1 = [{ wch: 10 }];
-  categories.forEach(() => wscols1.push({ wch: 8 }));
-  wscols1.push({ wch: 28 });
-  ws1['!cols'] = wscols1;
+  const range = XLSX.utils.decode_range(ws1['!ref']);
 
-  // Styles via cell properties
-  const range1 = XLSX.utils.decode_range(ws1['!ref']);
-
-  // Style header row
-  for (let c = range1.s.c; c <= range1.e.c; c++) {
+  // Estilo cabeçalho
+  for (let c = range.s.c; c <= range.e.c; c++) {
     const cell = ws1[XLSX.utils.encode_cell({ r: 0, c })];
-    if (cell) {
-      cell.s = {
-        fill: { fgColor: { rgb: '1E3A5F' } },
-        font: { color: { rgb: 'FFFFFF' }, bold: true, sz: 11, name: 'Arial' },
-        alignment: { horizontal: 'center', vertical: 'center' },
-        border: { bottom: { style: 'thin', color: { rgb: 'C8A84B' } } }
-      };
-    }
+    if (cell) cell.s = {
+      fill: { fgColor: { rgb: c === range.e.c ? '162D4A' : '1E3A5F' } },
+      font: { color: { rgb: 'FFFFFF' }, bold: true, sz: 10, name: 'Arial' },
+      alignment: { horizontal: c === 0 ? 'left' : 'center', vertical: 'center' }
+    };
   }
 
-  // Style data rows
+  // Estilo dados
   const colorMap = {
-    high:     { bg: 'C0392B', fg: 'FFFFFF' },
-    'med-high': { bg: 'E67E22', fg: 'FFFFFF' },
-    med:      { bg: 'F39C12', fg: 'FFFFFF' },
-    'low-med': { bg: 'F1C40F', fg: '333333' },
-    low:      { bg: '2ECC71', fg: 'FFFFFF' },
-    'very-low': { bg: '27AE60', fg: 'FFFFFF' },
+    'c-high':    { bg: 'C0392B', fg: 'FFFFFF' },
+    'c-medhigh': { bg: 'E67E22', fg: 'FFFFFF' },
+    'c-med':     { bg: 'F39C12', fg: 'FFFFFF' },
+    'c-lowmed':  { bg: 'F1C40F', fg: '333333' },
+    'c-low':     { bg: '2ECC71', fg: 'FFFFFF' },
+    'c-verylow': { bg: '27AE60', fg: 'FFFFFF' },
   };
 
   for (let r = 1; r <= rows.length; r++) {
     const row = rows[r - 1];
-    const colorClass = totalColorClass(row.total, maxTotal);
-    const colors = colorMap[colorClass] || colorMap['very-low'];
+    const cc = colorClass(row.total, maxTotal);
+    const colors = colorMap[cc];
+    const rowBg = r % 2 === 0 ? 'FAFAF8' : 'FFFFFF';
 
-    // Date cell
-    const dateCell = ws1[XLSX.utils.encode_cell({ r, c: 0 })];
-    if (dateCell) {
-      dateCell.s = {
-        font: { bold: true, sz: 11, name: 'Arial' },
-        alignment: { horizontal: 'left' },
-        fill: { fgColor: { rgb: 'F7F5F0' } }
-      };
-    }
+    // Data
+    const dc = ws1[XLSX.utils.encode_cell({ r, c: 0 })];
+    if (dc) dc.s = { fill: { fgColor: { rgb: 'F7F5F0' } }, font: { bold: true, sz: 10, name: 'Arial' }, alignment: { horizontal: 'left' } };
 
-    // Value cells
+    // Valores
     for (let c = 1; c <= categories.length; c++) {
       const cell = ws1[XLSX.utils.encode_cell({ r, c })];
-      if (cell) {
-        cell.s = {
-          font: { sz: 11, name: 'Arial' },
-          alignment: { horizontal: 'center' },
-          fill: { fgColor: { rgb: r % 2 === 0 ? 'FAFAF8' : 'FFFFFF' } }
-        };
-      }
+      if (cell) cell.s = { fill: { fgColor: { rgb: rowBg } }, font: { sz: 10, name: 'Arial' }, alignment: { horizontal: 'center' } };
     }
 
-    // Total cell
-    const totalCol = categories.length + 1;
-    const totalCell = ws1[XLSX.utils.encode_cell({ r, c: totalCol })];
-    if (totalCell) {
-      totalCell.s = {
-        fill: { fgColor: { rgb: colors.bg } },
-        font: { color: { rgb: colors.fg }, bold: true, sz: 11, name: 'Arial' },
-        alignment: { horizontal: 'center' },
-        border: { left: { style: 'medium', color: { rgb: 'AAAAAA' } } }
-      };
-    }
+    // Total
+    const tc = ws1[XLSX.utils.encode_cell({ r, c: categories.length + 1 })];
+    if (tc) tc.s = { fill: { fgColor: { rgb: colors.bg } }, font: { color: { rgb: colors.fg }, bold: true, sz: 10, name: 'Arial' }, alignment: { horizontal: 'center' } };
   }
 
-  // Total type row
-  const totalRow = rows.length + 1;
-  for (let c = range1.s.c; c <= range1.e.c; c++) {
-    const cell = ws1[XLSX.utils.encode_cell({ r: totalRow, c })];
-    if (cell) {
-      cell.s = {
-        fill: { fgColor: { rgb: '1E3A5F' } },
-        font: { color: { rgb: 'FFFFFF' }, bold: true, sz: 11, name: 'Arial' },
-        alignment: { horizontal: c === 0 ? 'left' : 'center' }
-      };
-    }
+  // Rodapé
+  const fr = rows.length + 1;
+  for (let c = range.s.c; c <= range.e.c; c++) {
+    const cell = ws1[XLSX.utils.encode_cell({ r: fr, c })];
+    if (cell) cell.s = {
+      fill: { fgColor: { rgb: c === range.e.c ? '162D4A' : '1E3A5F' } },
+      font: { color: { rgb: 'FFFFFF' }, bold: true, sz: 10, name: 'Arial' },
+      alignment: { horizontal: c === 0 ? 'left' : 'center' }
+    };
   }
 
-  // Category legend columns (like the Excel reference)
-  const legendStartCol = categories.length + 3;
-  const legendCats = categories.filter(c => CATEGORY_NAMES[c]);
-  legendCats.forEach((cat, i) => {
-    const rowIdx = i + 7;
-    const codeCell = { v: cat, t: 's' };
-    const nameCell = { v: CATEGORY_NAMES[cat], t: 's' };
-    const codeAddr = XLSX.utils.encode_cell({ r: rowIdx, c: legendStartCol });
-    const nameAddr = XLSX.utils.encode_cell({ r: rowIdx, c: legendStartCol + 1 });
-    ws1[codeAddr] = codeCell;
-    ws1[nameAddr] = nameCell;
-    codeCell.s = {
-      fill: { fgColor: { rgb: 'E6F0F8' } },
-      font: { bold: true, sz: 10, name: 'Arial', color: { rgb: '1E3A5F' } },
-      alignment: { horizontal: 'center' }
-    };
-    nameCell.s = {
-      font: { sz: 10, name: 'Arial' },
-      alignment: { horizontal: 'left' }
-    };
+  // Legenda à direita
+  const legCol = categories.length + 3;
+  categories.filter(c => CATEGORY_NAMES[c]).forEach((cat, i) => {
+    const rr = i + 7;
+    const cc = ws1[XLSX.utils.encode_cell({ r: rr, c: legCol })] || { t: 's' };
+    cc.v = cat; cc.t = 's';
+    cc.s = { fill: { fgColor: { rgb: 'E6F0F8' } }, font: { bold: true, sz: 10, name: 'Arial', color: { rgb: '1E3A5F' } }, alignment: { horizontal: 'center' } };
+    ws1[XLSX.utils.encode_cell({ r: rr, c: legCol })] = cc;
+    const nc = { v: CATEGORY_NAMES[cat], t: 's', s: { font: { sz: 10, name: 'Arial' }, alignment: { horizontal: 'left' } } };
+    ws1[XLSX.utils.encode_cell({ r: rr, c: legCol + 1 })] = nc;
   });
+  if (!ws1['!cols']) ws1['!cols'] = wscols;
+  ws1['!cols'][legCol] = { wch: 8 };
+  ws1['!cols'][legCol + 1] = { wch: 38 };
 
   XLSX.utils.book_append_sheet(wb, ws1, 'Rooms on the Book by TYPE');
 
-  // ── Sheet 2: Arrivals room type daily (summary) ──────────────────────────────
+  // Sheet 2 simples
   const ws2Data = [['Data', ...categories, 'Total']];
-  rows.forEach(row => {
-    ws2Data.push([row.date, ...categories.map(c => row.values[c] || 0), row.total]);
-  });
+  rows.forEach(row => ws2Data.push([row.date, ...categories.map(c => row.values[c] || 0), row.total]));
   ws2Data.push(['Total Arrivals', ...categories.map(c => colTotals[c] || 0), grandTotal]);
-
   const ws2 = XLSX.utils.aoa_to_sheet(ws2Data);
-  ws2['!cols'] = wscols1;
+  ws2['!cols'] = wscols;
   XLSX.utils.book_append_sheet(wb, ws2, 'Arrivals room type daily');
 
-  // Build filename from first date
-  const firstDate = rows[0]?.date.replace(/\//g, '') || 'forecast';
-  const lastDate = rows[rows.length - 1]?.date.replace(/\//g, '') || '';
-  const filename = `RoomForecast_${firstDate}_${lastDate}.xlsx`;
-
-  XLSX.writeFile(wb, filename);
-}
-
-function totalColorClass(total, max) {
-  const pct = max > 0 ? total / max : 0;
-  if (pct >= 0.9) return 'high';
-  if (pct >= 0.75) return 'med-high';
-  if (pct >= 0.60) return 'med';
-  if (pct >= 0.45) return 'low-med';
-  if (pct >= 0.25) return 'low';
-  return 'very-low';
-}
+  const d1 = rows[0]?.date.replace(/\//g, '') || '';
+  const d2 = rows[rows.length-1]?.date.replace(/\//g, '') || '';
+  XLSX.writeFile(wb, `RoomForecast_${d1}_${d2}.xlsx`);
+});
 
 // ─── Status bar ───────────────────────────────────────────────────────────────
 function showStatus(msg, isError) {
   const bar = document.getElementById('statusBar');
   bar.textContent = msg;
   bar.className = 'status-bar visible' + (isError ? ' error' : '');
-  setTimeout(() => bar.classList.remove('visible'), 6000);
+  if (!isError) setTimeout(() => bar.classList.remove('visible'), 7000);
 }
-
-// ─── Demo data (preload with reference data) ─────────────────────────────────
-const DEMO_DATA = {
-  categories: ['ELET','ELED','ELETC','DELUXE','MASTER','RV2','RV3','STO','STOC','SDO','SDOC','ORV2','RVP2','GRAND'],
-  rows: [
-    {date:'03/05/26',values:{ELET:31,ELED:7,ELETC:21,DELUXE:7,MASTER:1,RV2:3,RV3:0,STO:0,STOC:0,SDO:0,SDOC:1,ORV2:0,RVP2:0,GRAND:0},total:71},
-    {date:'04/05/26',values:{ELET:31,ELED:7,ELETC:19,DELUXE:9,MASTER:2,RV2:3,RV3:0,STO:0,STOC:1,SDO:0,SDOC:1,ORV2:0,RVP2:0,GRAND:0},total:73},
-    {date:'05/05/26',values:{ELET:33,ELED:8,ELETC:20,DELUXE:11,MASTER:2,RV2:2,RV3:0,STO:0,STOC:1,SDO:0,SDOC:1,ORV2:0,RVP2:0,GRAND:0},total:78},
-    {date:'06/05/26',values:{ELET:30,ELED:8,ELETC:19,DELUXE:7,MASTER:2,RV2:2,RV3:0,STO:0,STOC:1,SDO:0,SDOC:1,ORV2:0,RVP2:0,GRAND:0},total:70},
-    {date:'07/05/26',values:{ELET:30,ELED:9,ELETC:20,DELUXE:8,MASTER:2,RV2:2,RV3:1,STO:1,STOC:1,SDO:0,SDOC:1,ORV2:1,RVP2:0,GRAND:0},total:76},
-    {date:'08/05/26',values:{ELET:27,ELED:7,ELETC:18,DELUXE:7,MASTER:2,RV2:2,RV3:0,STO:1,STOC:1,SDO:0,SDOC:0,ORV2:1,RVP2:0,GRAND:0},total:66},
-    {date:'09/05/26',values:{ELET:24,ELED:4,ELETC:6,DELUXE:10,MASTER:3,RV2:4,RV3:0,STO:0,STOC:1,SDO:0,SDOC:0,ORV2:1,RVP2:0,GRAND:0},total:53},
-    {date:'10/05/26',values:{ELET:24,ELED:6,ELETC:6,DELUXE:11,MASTER:2,RV2:3,RV3:0,STO:0,STOC:1,SDO:1,SDOC:1,ORV2:1,RVP2:0,GRAND:0},total:56},
-    {date:'11/05/26',values:{ELET:26,ELED:7,ELETC:7,DELUXE:12,MASTER:2,RV2:3,RV3:0,STO:0,STOC:1,SDO:0,SDOC:1,ORV2:1,RVP2:0,GRAND:0},total:60},
-    {date:'12/05/26',values:{ELET:28,ELED:5,ELETC:8,DELUXE:12,MASTER:2,RV2:0,RV3:0,STO:1,STOC:0,SDO:0,SDOC:1,ORV2:1,RVP2:0,GRAND:0},total:58},
-    {date:'13/05/26',values:{ELET:30,ELED:5,ELETC:12,DELUXE:11,MASTER:2,RV2:2,RV3:1,STO:1,STOC:0,SDO:0,SDOC:1,ORV2:1,RVP2:0,GRAND:0},total:66},
-    {date:'14/05/26',values:{ELET:26,ELED:6,ELETC:14,DELUXE:12,MASTER:4,RV2:3,RV3:1,STO:0,STOC:0,SDO:1,SDOC:0,ORV2:1,RVP2:1,GRAND:0},total:69},
-    {date:'15/05/26',values:{ELET:33,ELED:11,ELETC:15,DELUXE:12,MASTER:4,RV2:0,RV3:1,STO:0,STOC:1,SDO:1,SDOC:0,ORV2:1,RVP2:1,GRAND:0},total:80},
-    {date:'16/05/26',values:{ELET:36,ELED:11,ELETC:16,DELUXE:14,MASTER:3,RV2:0,RV3:0,STO:0,STOC:1,SDO:1,SDOC:0,ORV2:1,RVP2:1,GRAND:1},total:84},
-    {date:'17/05/26',values:{ELET:34,ELED:0,ELETC:20,DELUXE:0,MASTER:3,RV2:2,RV3:0,STO:0,STOC:1,SDO:0,SDOC:1,ORV2:1,RVP2:0,GRAND:1},total:62},
-    {date:'18/05/26',values:{ELET:37,ELED:10,ELETC:23,DELUXE:14,MASTER:3,RV2:1,RV3:0,STO:1,STOC:0,SDO:0,SDOC:1,ORV2:1,RVP2:0,GRAND:1},total:91},
-    {date:'19/05/26',values:{ELET:36,ELED:11,ELETC:0,DELUXE:0,MASTER:4,RV2:2,RV3:0,STO:1,STOC:0,SDO:0,SDOC:1,ORV2:1,RVP2:0,GRAND:1},total:56},
-    {date:'20/05/26',values:{ELET:0,ELED:10,ELETC:24,DELUXE:14,MASTER:0,RV2:2,RV3:1,STO:0,STOC:0,SDO:0,SDOC:0,ORV2:1,RVP2:0,GRAND:1},total:52},
-    {date:'21/05/26',values:{ELET:0,ELED:11,ELETC:24,DELUXE:14,MASTER:0,RV2:4,RV3:0,STO:0,STOC:0,SDO:0,SDOC:0,ORV2:1,RVP2:0,GRAND:0},total:54},
-    {date:'22/05/26',values:{ELET:35,ELED:9,ELETC:23,DELUXE:0,MASTER:0,RV2:2,RV3:0,STO:0,STOC:0,SDO:1,SDOC:1,ORV2:1,RVP2:1,GRAND:0},total:73},
-    {date:'23/05/26',values:{ELET:38,ELED:0,ELETC:0,DELUXE:0,MASTER:2,RV2:0,RV3:0,STO:0,STOC:1,SDO:0,SDOC:0,ORV2:5,RVP2:0,GRAND:0},total:46},
-    {date:'24/05/26',values:{ELET:37,ELED:10,ELETC:22,DELUXE:12,MASTER:1,RV2:0,RV3:0,STO:0,STOC:1,SDO:0,SDOC:1,ORV2:6,RVP2:0,GRAND:0},total:90},
-    {date:'25/05/26',values:{ELET:36,ELED:0,ELETC:21,DELUXE:0,MASTER:2,RV2:0,RV3:0,STO:0,STOC:0,SDO:0,SDOC:0,ORV2:6,RVP2:0,GRAND:0},total:65},
-    {date:'26/05/26',values:{ELET:38,ELED:8,ELETC:17,DELUXE:0,MASTER:3,RV2:0,RV3:0,STO:0,STOC:0,SDO:0,SDOC:0,ORV2:6,RVP2:0,GRAND:0},total:72},
-    {date:'27/05/26',values:{ELET:0,ELED:7,ELETC:19,DELUXE:0,MASTER:4,RV2:0,RV3:0,STO:0,STOC:0,SDO:0,SDOC:0,ORV2:6,RVP2:0,GRAND:0},total:36},
-    {date:'28/05/26',values:{ELET:0,ELED:9,ELETC:24,DELUXE:12,MASTER:3,RV2:4,RV3:1,STO:1,STOC:0,SDO:0,SDOC:0,ORV2:6,RVP2:0,GRAND:0},total:60},
-    {date:'29/05/26',values:{ELET:36,ELED:7,ELETC:21,DELUXE:9,MASTER:3,RV2:4,RV3:0,STO:1,STOC:0,SDO:0,SDOC:0,ORV2:4,RVP2:0,GRAND:0},total:85},
-    {date:'30/05/26',values:{ELET:25,ELED:6,ELETC:13,DELUXE:4,MASTER:3,RV2:2,RV3:0,STO:1,STOC:0,SDO:0,SDOC:1,ORV2:1,RVP2:1,GRAND:0},total:57},
-    {date:'31/05/26',values:{ELET:27,ELED:5,ELETC:9,DELUXE:5,MASTER:2,RV2:1,RV3:1,STO:1,STOC:1,SDO:0,SDOC:0,ORV2:0,RVP2:0,GRAND:0},total:52},
-  ]
-};
-
-// Load demo data on start
-renderAndStore(DEMO_DATA);
-document.getElementById('exportBtn').style.display = '';
 </script>
 </body>
 </html>
