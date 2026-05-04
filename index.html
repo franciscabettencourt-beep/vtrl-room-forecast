@@ -3,166 +3,141 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Room Forecast — Chegadas por Categoria</title>
+<title>Room Type Forecast — Vilalara</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   :root {
-    --bg: #f7f6f2;
-    --card: #ffffff;
-    --border: #e2ddd6;
-    --border-strong: #c8c2b8;
-    --text: #1a1916;
-    --text-muted: #6b6860;
-    --accent: #1a4a7a;
-    --accent-light: #e6f0f8;
-    --header-bg: #1e3a5f;
-    --header-text: #ffffff;
-    --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --bg: #f7f6f2; --card: #fff; --border: #e2ddd6; --border-strong: #c8c2b8;
+    --text: #1a1916; --text-muted: #6b6860; --accent: #1a4a7a; --accent-light: #e6f0f8;
+    --header-bg: #1e3a5f; --gold: #c8a84b; --font: 'Segoe UI', system-ui, sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; }
 
   .app-header {
-    background: var(--header-bg);
-    color: var(--header-text);
-    padding: 18px 32px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    border-bottom: 3px solid #c8a84b;
+    background: var(--header-bg); color: #fff;
+    padding: 16px 32px; display: flex; align-items: center; gap: 14px;
+    border-bottom: 3px solid var(--gold);
   }
-  .app-header .logo {
-    width: 36px; height: 36px;
-    background: #c8a84b;
-    border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px; font-weight: 700; color: #1e3a5f;
-  }
-  .app-header h1 { font-size: 20px; font-weight: 600; letter-spacing: -0.3px; }
-  .app-header p { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 2px; }
+  .logo { width: 34px; height: 34px; background: var(--gold); border-radius: 6px;
+    display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #1e3a5f; }
+  .app-header h1 { font-size: 18px; font-weight: 600; }
+  .app-header p { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 2px; }
 
-  .main { max-width: 1600px; margin: 0 auto; padding: 24px 24px 48px; }
+  .main { max-width: 1100px; margin: 0 auto; padding: 20px 20px 48px; }
 
-  .upload-section {
-    background: var(--card);
-    border: 1.5px dashed var(--border-strong);
-    border-radius: 12px;
-    padding: 28px 32px;
-    text-align: center;
-    margin-bottom: 20px;
-    transition: border-color 0.2s, background 0.2s;
+  .upload-box {
+    background: var(--card); border: 1.5px dashed var(--border-strong);
+    border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 14px;
   }
-  .upload-section.dragover { border-color: var(--accent); background: var(--accent-light); }
-  .upload-section h2 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
-  .upload-section p { font-size: 13px; color: var(--text-muted); margin-bottom: 18px; line-height: 1.6; }
-  .upload-area { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .upload-box h2 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .upload-box p { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+  .paste-box {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 20px; margin-bottom: 14px;
+  }
+  .paste-box h2 { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  textarea {
+    width: 100%; min-height: 110px; padding: 10px; border: 1px solid var(--border);
+    border-radius: 8px; font-family: monospace; font-size: 12px; resize: vertical;
+    background: #fafaf8; outline: none;
+  }
+  textarea:focus { border-color: var(--accent); }
+  .controls { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; align-items: center; }
 
   .btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 500;
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 500;
     cursor: pointer; border: 1.5px solid; transition: all 0.15s; font-family: var(--font);
   }
   .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
   .btn-primary:hover { background: #153d6a; }
-  .btn-secondary { background: #fff; color: var(--text); border-color: var(--border-strong); }
-  .btn-secondary:hover { background: var(--bg); }
-  .btn-gold { background: #c8a84b; color: #1e3a5f; border-color: #c8a84b; font-weight: 600; }
+  .btn-outline { background: #fff; color: var(--text); border-color: var(--border-strong); }
+  .btn-outline:hover { background: var(--bg); }
+  .btn-gold { background: var(--gold); color: #1e3a5f; border-color: var(--gold); font-weight: 600; }
   .btn-gold:hover { background: #b8943a; }
   input[type=file] { display: none; }
 
-  .paste-section {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px 24px;
-    margin-bottom: 20px;
-  }
-  .paste-section h2 { font-size: 11px; font-weight: 600; margin-bottom: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-  .paste-area {
-    width: 100%; min-height: 140px; padding: 12px;
-    border: 1px solid var(--border); border-radius: 8px;
-    font-family: 'Courier New', monospace; font-size: 12px;
-    resize: vertical; background: #fafaf8; color: var(--text); outline: none;
-  }
-  .paste-area:focus { border-color: var(--accent); }
-  .paste-controls { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; align-items: center; }
+  .status { padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; display: none; }
+  .status.ok  { background: #e8f4e8; border: 1px solid #4caf50; color: #2e7d32; display: block; }
+  .status.err { background: #fdecea; border: 1px solid #f44336; color: #c62828; display: block; }
 
-  .status-bar {
-    background: #e8f4e8; border: 1px solid #4caf50; border-radius: 8px;
-    padding: 10px 16px; margin-bottom: 16px; font-size: 13px; color: #2e7d32; display: none;
-  }
-  .status-bar.error { background: #fdecea; border-color: #f44336; color: #c62828; }
-  .status-bar.visible { display: block; }
+  .section-title { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
 
-  .forecast-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 14px; flex-wrap: wrap; gap: 12px;
+  /* Mini calendário */
+  .mini-cal { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 18px; }
+  .cal-day {
+    width: 46px; height: 46px; border-radius: 8px; border: 1.5px solid var(--border);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.1s; user-select: none;
   }
-  .forecast-title { font-size: 19px; font-weight: 700; color: var(--header-bg); }
-  .forecast-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
-  .legend { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-muted); }
-  .legend-dot { width: 12px; height: 12px; border-radius: 2px; }
+  .cal-day:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .cal-day.active { border-color: var(--header-bg); border-width: 2.5px; box-shadow: 0 2px 8px rgba(30,58,95,0.2); }
+  .cal-day .cd { font-weight: 700; font-size: 13px; }
+  .cal-day .ct { font-size: 10px; color: var(--text-muted); }
+  .c-h { background: #fdecea; } .c-mh { background: #fff3e0; }
+  .c-m { background: #fffde7; } .c-l { background: #e8f5e9; }
 
-  .table-wrapper { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); background: var(--card); box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
-  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  /* Navegador */
+  .navigator {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 20px; margin-bottom: 16px;
+  }
+  .nav-top { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+  .nav-date { font-size: 22px; font-weight: 700; color: var(--header-bg); min-width: 110px; text-align: center; }
+  .nav-btn {
+    background: var(--header-bg); color: #fff; border: none; border-radius: 6px;
+    width: 34px; height: 34px; cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav-btn:hover { background: #153d6a; }
+  .nav-btn:disabled { background: #ccc; cursor: default; }
+  input[type=range] { flex: 1; min-width: 150px; accent-color: var(--header-bg); }
+
+  /* Cards */
+  .day-cards { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+  .day-card {
+    flex: 1; min-width: 100px; background: var(--accent-light);
+    border: 1px solid #c8dff0; border-radius: 10px; padding: 10px 14px; text-align: center;
+  }
+  .day-card .val { font-size: 22px; font-weight: 700; color: var(--header-bg); }
+  .day-card .lbl { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .occ-bar-wrap { background: #e8e4df; border-radius: 4px; height: 5px; margin-top: 4px; }
+  .occ-bar { height: 5px; border-radius: 4px; }
+  .card-red { background: #fdecea; border-color: #f44336; }
+  .card-red .val { color: #c62828; }
+  .card-orange { background: #fff3e0; border-color: #f39c12; }
+  .card-orange .val { color: #e07b39; }
+  .card-green { background: #e8f5e9; border-color: #4caf50; }
+  .card-green .val { color: #2e7d32; }
+
+  /* Tabela */
+  .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); background: var(--card); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
   thead th {
-    background: var(--header-bg); color: #fff;
-    padding: 9px 6px; text-align: center; font-weight: 600; font-size: 11px;
-    white-space: nowrap; border-right: 1px solid rgba(255,255,255,0.1);
-    position: sticky; top: 0; z-index: 2;
+    background: var(--header-bg); color: #fff; padding: 9px 10px;
+    text-align: center; font-weight: 600; font-size: 11px; white-space: nowrap;
+    border-right: 1px solid rgba(255,255,255,0.1);
   }
-  thead th:first-child { text-align: left; padding-left: 12px; min-width: 88px; }
-  thead th.total-col { background: #162d4a; }
-
+  thead th:first-child { text-align: left; padding-left: 14px; min-width: 220px; }
   tbody tr:nth-child(even) td { background: #fafaf8; }
   tbody tr:hover td { background: #f0ede8 !important; }
-  tbody td {
-    padding: 6px 6px; text-align: center;
-    border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
-    font-variant-numeric: tabular-nums;
-  }
-  tbody td:first-child {
-    text-align: left; padding-left: 12px; font-weight: 500; font-size: 11px;
-    color: var(--text-muted); white-space: nowrap;
-    background: #f7f5f0 !important; border-right: 2px solid var(--border-strong);
-  }
-  tbody td.zero { color: #ddd; }
-  tbody td.val { font-weight: 500; color: var(--text); }
-
-  .total-cell { font-weight: 700; font-size: 12px; border-left: 2px solid var(--border-strong); min-width: 54px; }
-  .total-cell.c-high     { background: #c0392b !important; color: #fff; }
-  .total-cell.c-medhigh  { background: #e67e22 !important; color: #fff; }
-  .total-cell.c-med      { background: #f39c12 !important; color: #fff; }
-  .total-cell.c-lowmed   { background: #f1c40f !important; color: #333; }
-  .total-cell.c-low      { background: #2ecc71 !important; color: #fff; }
-  .total-cell.c-verylow  { background: #27ae60 !important; color: #fff; }
-
-  tfoot td {
-    background: #1e3a5f !important; color: #fff !important; font-weight: 700;
-    padding: 8px 6px; text-align: center;
-    border-right: 1px solid rgba(255,255,255,0.1); font-size: 12px;
-  }
-  tfoot td:first-child { text-align: left; padding-left: 12px; font-size: 11px; background: #162d4a !important; }
-
-  .cat-legend {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-    gap: 7px; margin-top: 18px;
-  }
-  .cat-item { display: flex; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 7px 12px; }
-  .cat-code { font-weight: 700; font-size: 12px; color: var(--header-bg); min-width: 52px; background: var(--accent-light); padding: 3px 6px; border-radius: 4px; text-align: center; }
-  .cat-name { font-size: 12px; color: var(--text-muted); }
+  tbody td { padding: 7px 10px; text-align: center; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  tbody td:first-child { text-align: left; padding-left: 14px; background: #f7f5f0 !important; border-right: 2px solid var(--border-strong); }
+  .t-cat { font-weight: 700; color: var(--header-bg); font-size: 12px; }
+  .t-name { color: var(--text-muted); font-size: 11px; margin-left: 6px; }
+  .t-ooo { color: #c62828; }
+  .t-res-full { color: #c0392b; font-weight: 700; }
+  .t-avail-good { color: #27ae60; font-weight: 600; }
+  .t-avail-none { color: #c0392b; font-weight: 700; }
+  tfoot td { background: #1e3a5f !important; color: #fff !important; font-weight: 700; padding: 9px 10px; text-align: center; border-right: 1px solid rgba(255,255,255,0.15); }
+  tfoot td:first-child { text-align: left; padding-left: 14px; background: #162d4a !important; }
 
   .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
-  .empty-state .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.3; }
-  .empty-state h3 { font-size: 18px; font-weight: 500; margin-bottom: 8px; color: var(--text); }
-  .empty-state p { font-size: 14px; line-height: 1.6; }
-
-  .instructions {
-    background: #fff9e6; border: 1px solid #f0c040; border-radius: 10px;
-    padding: 16px 20px; margin-bottom: 20px; font-size: 13px; line-height: 1.7;
-  }
-  .instructions strong { color: #7a5500; }
+  .empty-state .icon { font-size: 44px; margin-bottom: 14px; opacity: 0.3; }
+  .empty-state h3 { font-size: 17px; font-weight: 500; margin-bottom: 6px; color: var(--text); }
+  .empty-state p { font-size: 13px; line-height: 1.6; }
+  canvas { display: none; }
 </style>
 </head>
 <body>
@@ -170,614 +145,459 @@
 <div class="app-header">
   <div class="logo">RF</div>
   <div>
-    <h1>Room Forecast — Chegadas por Categoria</h1>
+    <h1>Room Type Forecast</h1>
     <p>Vilalara Thalassa Resort · Opera PMS</p>
   </div>
 </div>
 
 <div class="main">
 
-  <div class="instructions">
-    <strong>Como usar:</strong> Abre o report do Opera no browser → selecciona todo o texto (Ctrl+A) → copia (Ctrl+C) → cola na área abaixo → clica <strong>Processar</strong>.<br>
-    Ou arrasta o ficheiro <strong>.htm</strong> directamente para a zona de upload.
-  </div>
-
-  <div class="upload-section" id="dropZone">
+  <div class="upload-box" id="dropZone">
     <h2>Carregar ficheiro HTML do Opera</h2>
     <p>Arrasta o ficheiro <strong>room_type_forecast*.htm</strong> aqui, ou clica para selecionar.</p>
-    <div class="upload-area">
-      <label class="btn btn-primary" for="fileInput">
-        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
-        Selecionar ficheiro .htm
-      </label>
-      <input type="file" id="fileInput" accept=".htm,.html,.txt">
-    </div>
+    <label class="btn btn-primary" for="fileInput">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+      Selecionar ficheiro .htm
+    </label>
+    <input type="file" id="fileInput" accept=".htm,.html,.txt">
   </div>
 
-  <div class="paste-section">
+  <div class="paste-box">
     <h2>Ou cola aqui o texto do report (Ctrl+A → Ctrl+C na página do Opera → Ctrl+V aqui)</h2>
-    <textarea class="paste-area" id="pasteArea" placeholder="Cola aqui o conteúdo copiado da página do Opera (room_type_forecast*.htm)..."></textarea>
-    <div class="paste-controls">
-      <button class="btn btn-secondary" id="parseBtn">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+    <textarea id="pasteArea" placeholder="Cola aqui o conteúdo copiado da página do Opera..."></textarea>
+    <div class="controls">
+      <button class="btn btn-outline" id="parseBtn">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
         Processar
       </button>
       <button class="btn btn-gold" id="exportBtn" style="display:none">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-        Exportar Excel
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Exportar Excel (mês completo)
       </button>
-      <button class="btn btn-secondary" id="chartBtn" style="display:none">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+      <button class="btn btn-outline" id="chartBtn" style="display:none">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
         Guardar Gráfico PNG
       </button>
     </div>
   </div>
-  <canvas id="chartCanvas" style="display:none"></canvas>
 
-  <div class="status-bar" id="statusBar"></div>
-
-  <div id="forecastContainer">
+  <div class="status" id="statusBar"></div>
+  <div id="appContent">
     <div class="empty-state">
       <div class="icon">📊</div>
       <h3>Sem dados carregados</h3>
-      <p>Cola o texto do report do Opera acima e clica Processar,<br>ou arrasta o ficheiro .htm para a zona de upload.</p>
+      <p>Cola o texto do report do Opera e clica Processar,<br>ou arrasta o ficheiro .htm.</p>
     </div>
   </div>
-
+  <canvas id="chartCanvas"></canvas>
 </div>
 
 <script>
-// ─── Categorias conhecidas ────────────────────────────────────────────────────
 const CATEGORY_NAMES = {
-  ELET:  'Elegante Suite Twin',
-  ELED:  'Elegante Suite Double',
-  ELETC: 'Elegante Suite Twin Comunicante',
-  ELEDC: 'Elegante Suite Double Comunicante',
-  DELUXE:'Deluxe Suite',
-  MASTER:'Master Suite',
-  RV2:   'Residence Vilalara 02 Bedroom',
-  RV3:   'Residence Vilalara 03 Bedroom',
-  STO:   'Ocean Suite View Twin',
-  STOC:  'Ocean Suite View Twin Comunicante',
-  SDO:   'Ocean Suite View Double',
-  SDOC:  'Ocean Suite View Double Comunicante',
-  SC:    'Sala Reuniões',
-  ORV2:  'Owner Residence Vilalara 02 Bedroom',
-  RVP2:  'Resindence Vilalara Primium 02 Bedroom',
-  RVP2M: 'Residence Vilalara Primium 02 Bedroom Master',
-  ONRA2: 'Ocean No Reservation Area 02 Bedroom',
-  GRAND: 'Grand Suite, com mais de 140 m²',
-  STG:   'Suite Garden',
+  ELET:'Elegante Suite Twin', ELED:'Elegante Suite Double',
+  ELETC:'Elegante Suite Twin Comunicante', ELEDC:'Elegante Suite Double Comunicante',
+  DELUXE:'Deluxe Suite', MASTER:'Master Suite',
+  RV2:'Residence Vilalara 02 Bedroom', RV3:'Residence Vilalara 03 Bedroom',
+  STO:'Ocean Suite View Twin', STOC:'Ocean Suite View Twin Comunicante',
+  SDO:'Ocean Suite View Double', SDOC:'Ocean Suite View Double Comunicante',
+  SC:'Sala Reuniões', ORV2:'Owner Residence Vilalara 02 Bedroom',
+  RVP2:'Resindence Vilalara Primium 02 Bedroom',
+  RVP2M:'Residence Vilalara Primium 02 Bedroom Master',
+  ONRA2:'Ocean No Reservation Area 02 Bedroom',
+  GRAND:'Grand Suite, com mais de 140 m²', STG:'Suite Garden',
 };
-
+const CAT_COLORS = {
+  ELET:'#1a6b9a',ELED:'#2196a8',ELETC:'#26a69a',ELEDC:'#43b89c',
+  DELUXE:'#c8a84b',MASTER:'#e07b39',RV2:'#7b5ea7',RV3:'#9c6fb5',
+  STO:'#2e7d32',STOC:'#43a047',SDO:'#66bb6a',SDOC:'#a5d6a7',
+  ORV2:'#c62828',RVP2:'#e53935',RVP2M:'#ef9a9a',GRAND:'#6d4c41',
+  STG:'#78909c',SC:'#b0bec5',ONRA2:'#cfd8dc',
+};
 const PREFERRED_ORDER = ['ELET','ELED','ELETC','ELEDC','DELUXE','MASTER','RV2','RV3','STO','STOC','SDO','SDOC','ORV2','RVP2','RVP2M','GRAND','STG','SC','ONRA2'];
-
-// Palavras a ignorar nas linhas
+const KNOWN_CATS = new Set(Object.keys(CATEGORY_NAMES));
 const SKIP_WORDS = ['hotel availability','grand total','filter','display','from date','to date','room class','room type forecast','physical','out of order','inventory','overbooking','reserved','available','page','vilalara','include','non deduct'];
+const DATE_RE = /^(\d{2})[\/\-](\d{2})[\/\-](\d{2,4})$/;
 
 let currentData = null;
+let currentDayIdx = 0;
 
-// ─── Upload ficheiro ──────────────────────────────────────────────────────────
+// Upload
 document.getElementById('fileInput').addEventListener('change', e => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => process(ev.target.result, file.name);
-  reader.readAsText(file, 'iso-8859-1');
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = ev => process(ev.target.result, f.name);
+  r.readAsText(f, 'iso-8859-1');
 });
-
 const dropZone = document.getElementById('dropZone');
-dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
-dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.style.borderColor='#1a4a7a'; });
+dropZone.addEventListener('dragleave', () => dropZone.style.borderColor='');
 dropZone.addEventListener('drop', e => {
-  e.preventDefault(); dropZone.classList.remove('dragover');
-  const file = e.dataTransfer.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => process(ev.target.result, file.name);
-  reader.readAsText(file, 'iso-8859-1');
+  e.preventDefault(); dropZone.style.borderColor='';
+  const f = e.dataTransfer.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = ev => process(ev.target.result, f.name);
+  r.readAsText(f, 'iso-8859-1');
 });
-
 document.getElementById('parseBtn').addEventListener('click', () => {
   const txt = document.getElementById('pasteArea').value.trim();
   if (!txt) return showStatus('Cola o conteúdo do Opera primeiro.', true);
   process(txt, 'paste');
 });
 
-// ─── Parser principal — formato Opera ────────────────────────────────────────
-// O Opera apresenta:
-//   DATE    CAT    Physical  OOO  Inventory  Overbooking  Reserved  Available
-// Cada linha tem uma categoria. A data só aparece na primeira linha do dia.
-// A coluna que nos interessa é "Reserved" (penúltima coluna numérica).
-
+// Parser
 function parseOpera(content) {
-  // Se for HTML, extrair texto
   let text = content;
-  if (content.includes('<html') || content.includes('<table') || content.includes('<HTML')) {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(content, 'text/html');
+  if (content.includes('<html') || content.includes('<HTML') || content.includes('<table')) {
+    const doc = new DOMParser().parseFromString(content, 'text/html');
     text = doc.body ? doc.body.innerText : content;
   }
-
-  const KNOWN_CATS = new Set(Object.keys(CATEGORY_NAMES));
-  const DATE_RE = /^(\d{2})[\/\-](\d{2})[\/\-](\d{2,4})$/;
-
-  const byDate = {}; // date -> {cat: reserved}
-  const dateOrder = [];
+  const byDate = {}, hotelByDate = {}, dateOrder = [];
   let currentDate = null;
 
-  const lines = text.split('\n');
-
-  for (const rawLine of lines) {
-    // Separar por tab ou múltiplos espaços
+  for (const rawLine of text.split('\n')) {
     const cells = rawLine.split(/\t+/).map(c => c.trim()).filter(c => c !== '');
-    if (cells.length === 0) continue;
+    if (!cells.length) continue;
+    const first = cells[0], firstLow = first.toLowerCase();
 
-    const first = cells[0];
-    const firstLower = first.toLowerCase();
-
-    // Ignorar linhas de cabeçalho/rodapé
-    if (SKIP_WORDS.some(sw => firstLower.startsWith(sw))) continue;
-    if (firstLower.includes('availability') || firstLower.includes('grand total')) continue;
-
-    // Verificar se primeira célula é data
-    let cat = null;
-    let numCells = [];
-
-    if (DATE_RE.test(first)) {
-      // Linha com data
-      const m = DATE_RE.exec(first);
-      let d = m[1], mo = m[2], y = m[3];
-      if (y.length === 4) y = y.slice(2);
-      currentDate = `${d}/${mo}/${y}`;
-
-      if (!byDate[currentDate]) {
-        byDate[currentDate] = {};
-        dateOrder.push(currentDate);
+    if (firstLow.includes('hotel availability')) {
+      if (currentDate) {
+        const nums = cells.slice(1).filter(c => /^\d+$/.test(c));
+        if (nums.length >= 5) hotelByDate[currentDate] = {
+          phys:+nums[0], ooo:+nums[1], inv:+nums[2], overbk:+nums[3],
+          reserved:+nums[4], avail:nums[5]!==undefined ? +nums[5] : (+nums[2]-+nums[4])
+        };
       }
+      continue;
+    }
+    if (SKIP_WORDS.some(sw => firstLow.startsWith(sw))) continue;
 
-      // Pode ter categoria na mesma linha (cells[1])
-      if (cells.length >= 2 && KNOWN_CATS.has(cells[1].toUpperCase())) {
+    let cat = null, numCells = [];
+    if (DATE_RE.test(first)) {
+      const m = DATE_RE.exec(first);
+      let d=m[1], mo=m[2], y=m[3];
+      if (y.length===4) y=y.slice(2);
+      currentDate = `${d}/${mo}/${y}`;
+      if (!byDate[currentDate]) { byDate[currentDate]={}; dateOrder.push(currentDate); }
+      if (cells.length>=2 && KNOWN_CATS.has(cells[1].toUpperCase())) {
         cat = cells[1].toUpperCase();
         numCells = cells.slice(2).filter(c => /^\d+$/.test(c));
       }
     } else if (KNOWN_CATS.has(first.toUpperCase()) && currentDate) {
-      // Linha de categoria
       cat = first.toUpperCase();
       numCells = cells.slice(1).filter(c => /^\d+$/.test(c));
     }
 
-    // Extrair Reserved: é a penúltima coluna numérica
-    // Formato: Physical OOO Inventory Overbooking Reserved Available
-    // = índices 0 1 2 3 4 5  → Reserved = índice 4
     if (cat && numCells.length >= 2) {
-      let reserved = 0;
-      if (numCells.length >= 5) {
-        reserved = parseInt(numCells[4]) || 0;
-      } else if (numCells.length >= 2) {
-        // Fallback: penúltimo
-        reserved = parseInt(numCells[numCells.length - 2]) || 0;
-      }
-      byDate[currentDate][cat] = reserved;
+      byDate[currentDate][cat] = {
+        phys:     +numCells[0]||0, ooo:   +numCells[1]||0,
+        inv:      +numCells[2]||0, overbk:+numCells[3]||0,
+        reserved: +numCells[4]||0, avail: +numCells[5]||0,
+      };
     }
   }
 
-  if (dateOrder.length === 0) {
-    return null;
-  }
-
-  // Descobrir todas as categorias presentes
+  if (!dateOrder.length) return null;
   const allCats = new Set();
   dateOrder.forEach(d => Object.keys(byDate[d]).forEach(c => allCats.add(c)));
-
-  // Ordenar categorias por ordem preferida
-  const orderedCats = PREFERRED_ORDER.filter(c => allCats.has(c));
-  allCats.forEach(c => { if (!orderedCats.includes(c)) orderedCats.push(c); });
-
-  // Remover STG e outras categorias não relevantes se quiser (deixar todas por ora)
-  const finalCats = orderedCats.filter(c => c !== 'STG'); // STG não é categoria de hóspede
-
-  // Construir rows
-  const rows = dateOrder.map(date => ({
-    date,
-    values: byDate[date],
-    total: finalCats.reduce((s, c) => s + (byDate[date][c] || 0), 0)
-  }));
-
-  return { categories: finalCats, rows };
+  const roomTypes = PREFERRED_ORDER.filter(c => allCats.has(c));
+  allCats.forEach(c => { if (!roomTypes.includes(c)) roomTypes.push(c); });
+  return { dates: dateOrder, roomTypes, byDate, hotelByDate };
 }
 
-function process(content, sourceName) {
+function process(content, src) {
   const data = parseOpera(content);
-  if (!data || data.rows.length === 0) {
-    return showStatus('Não foi possível extrair dados. Verifica se é o report correcto do Opera (room_type_forecast*.htm).', true);
-  }
-  currentData = data;
+  if (!data || !data.dates.length) return showStatus('Não foi possível extrair dados. Verifica se é o report correcto do Opera.', true);
+  currentData = data; currentDayIdx = 0;
   document.getElementById('exportBtn').style.display = '';
   document.getElementById('chartBtn').style.display = '';
-  renderTable(data);
-  showStatus(`✓ ${data.rows.length} dias carregados · ${data.categories.length} categorias · fonte: "${sourceName}"`);
+  renderApp();
+  showStatus(`✓ ${data.dates.length} dias · ${data.roomTypes.length} categorias · ${src}`);
 }
 
-// ─── Render tabela ────────────────────────────────────────────────────────────
-function colorClass(total, max) {
-  const p = max > 0 ? total / max : 0;
-  if (p >= 0.90) return 'c-high';
-  if (p >= 0.75) return 'c-medhigh';
-  if (p >= 0.60) return 'c-med';
-  if (p >= 0.45) return 'c-lowmed';
-  if (p >= 0.25) return 'c-low';
-  return 'c-verylow';
+// Render
+function renderApp() {
+  const { dates, hotelByDate } = currentData;
+  const maxInv = Math.max(...dates.map(d => hotelByDate[d]?.inv || 1), 1);
+
+  let html = `<div class="section-title">Calendário de Ocupação — clica num dia</div><div class="mini-cal">`;
+  dates.forEach((date, i) => {
+    const h = hotelByDate[date] || {};
+    const pct = (h.reserved||0) / (h.inv||1);
+    const cls = pct>=0.85?'c-h':pct>=0.70?'c-mh':pct>=0.50?'c-m':'c-l';
+    html += `<div class="cal-day ${cls}${i===0?' active':''}" onclick="goToDay(${i})">
+      <span class="cd">${date.slice(0,2)}</span>
+      <span class="ct">${h.reserved||0}</span>
+    </div>`;
+  });
+  html += `</div>
+  <div class="navigator">
+    <div class="nav-top">
+      <button class="nav-btn" id="prevBtn" onclick="goToDay(currentDayIdx-1)">&#8592;</button>
+      <div class="nav-date" id="navDate">${dates[0]}</div>
+      <button class="nav-btn" id="nextBtn" onclick="goToDay(currentDayIdx+1)">&#8594;</button>
+      <input type="range" id="daySlider" min="0" max="${dates.length-1}" value="0" oninput="goToDay(parseInt(this.value))">
+    </div>
+    <div id="dayCards" class="day-cards"></div>
+    <div class="table-wrap"><div id="dayTable"></div></div>
+  </div>`;
+
+  document.getElementById('appContent').innerHTML = html;
+  updateDay();
 }
 
-function renderTable(data) {
-  const { categories, rows } = data;
-  const maxTotal = Math.max(...rows.map(r => r.total), 1);
-  const colTotals = {};
-  categories.forEach(c => colTotals[c] = 0);
-  rows.forEach(r => categories.forEach(c => { colTotals[c] = (colTotals[c] || 0) + (r.values[c] || 0); }));
-  const grandTotal = rows.reduce((s, r) => s + r.total, 0);
+function goToDay(idx) {
+  if (!currentData) return;
+  idx = Math.max(0, Math.min(currentData.dates.length-1, idx));
+  currentDayIdx = idx;
+  document.querySelectorAll('.cal-day').forEach((el,i) => el.classList.toggle('active', i===idx));
+  document.getElementById('daySlider').value = idx;
+  updateDay();
+}
 
-  const firstDate = rows[0]?.date || '';
-  let monthLabel = '';
-  if (firstDate) {
-    const parts = firstDate.split('/');
-    const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-    monthLabel = `${months[parseInt(parts[1])-1]} 20${parts[2]}`;
-  }
+function updateDay() {
+  const { dates, roomTypes, byDate, hotelByDate } = currentData;
+  const date = dates[currentDayIdx];
+  const h = hotelByDate[date] || {};
+  const dayData = byDate[date] || {};
 
-  let html = `
-  <div class="forecast-header">
-    <div>
-      <div class="forecast-title">Room Forecast — Chegadas por Categoria</div>
-      <div class="forecast-subtitle">${monthLabel} · ${rows.length} dias · ${categories.length} categorias</div>
+  document.getElementById('prevBtn').disabled = currentDayIdx === 0;
+  document.getElementById('nextBtn').disabled = currentDayIdx === dates.length-1;
+  document.getElementById('navDate').textContent = date;
+
+  const inv = h.inv || 1;
+  const res = h.reserved || 0;
+  const avail = h.avail !== undefined ? h.avail : (inv-res);
+  const occ = Math.round(res/inv*100);
+  const occCls = occ>=85?'card-red':occ>=60?'card-orange':'card-green';
+  const occColor = occ>=85?'#c0392b':occ>=60?'#e07b39':'#27ae60';
+
+  document.getElementById('dayCards').innerHTML = `
+    <div class="day-card ${occCls}">
+      <div class="val">${occ}%</div><div class="lbl">Ocupação</div>
+      <div class="occ-bar-wrap"><div class="occ-bar" style="width:${occ}%;background:${occColor}"></div></div>
     </div>
-    <div class="legend">
-      <div class="legend-item"><div class="legend-dot" style="background:#c0392b"></div> &gt;90%</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#e67e22"></div> 75–90%</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#f39c12"></div> 60–75%</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#f1c40f"></div> 45–60%</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#2ecc71"></div> &lt;45%</div>
+    <div class="day-card"><div class="val">${h.phys||0}</div><div class="lbl">Quartos Físicos</div></div>
+    <div class="day-card card-red" style="background:${(h.ooo||0)>0?'#fdecea':'var(--accent-light)'}">
+      <div class="val" style="color:${(h.ooo||0)>0?'#c62828':'var(--header-bg)'}">${h.ooo||0}</div><div class="lbl">Out of Order</div>
     </div>
-  </div>
-  <div class="table-wrapper">
-  <table>
-  <thead>
-    <tr>
-      <th>Dia</th>
-      ${categories.map(c => `<th title="${CATEGORY_NAMES[c]||c}">${c}</th>`).join('')}
-      <th class="total-col">TOTAL DIA</th>
-    </tr>
-  </thead>
-  <tbody>`;
+    <div class="day-card"><div class="val">${inv}</div><div class="lbl">Inventário</div></div>
+    <div class="day-card ${occCls}"><div class="val">${res}</div><div class="lbl">Reservados</div></div>
+    <div class="day-card card-green"><div class="val">${avail}</div><div class="lbl">Disponíveis</div></div>
+  `;
 
-  rows.forEach(row => {
-    const cc = colorClass(row.total, maxTotal);
-    html += `<tr>
-      <td>${row.date}</td>
-      ${categories.map(c => {
-        const v = row.values[c] || 0;
-        return `<td class="${v === 0 ? 'zero' : 'val'}">${v || 0}</td>`;
-      }).join('')}
-      <td class="total-cell ${cc}">${row.total}</td>
+  let tbl = `<table><thead><tr>
+    <th>Room Type</th><th>Phys.</th><th>OOO</th><th>Inventário</th><th>Overbooking</th><th>Reservados</th><th>Disponíveis</th>
+  </tr></thead><tbody>`;
+
+  roomTypes.forEach(cat => {
+    const d = dayData[cat];
+    if (!d) return;
+    const fullCls = d.avail===0 && d.reserved>0 ? 't-res-full' : '';
+    const availCls = d.avail===0 ? 't-avail-none' : d.avail>=5 ? 't-avail-good' : '';
+    tbl += `<tr>
+      <td><span class="t-cat">${cat}</span><span class="t-name">${CATEGORY_NAMES[cat]||''}</span></td>
+      <td>${d.phys}</td>
+      <td class="${d.ooo>0?'t-ooo':''}">${d.ooo}</td>
+      <td>${d.inv}</td>
+      <td>${d.overbk>0?`<span style="color:#e07b39">${d.overbk}</span>`:0}</td>
+      <td class="${fullCls}">${d.reserved}</td>
+      <td class="${availCls}">${d.avail}</td>
     </tr>`;
   });
 
-  html += `</tbody>
-  <tfoot><tr>
-    <td>TOTAL TYPE</td>
-    ${categories.map(c => `<td>${colTotals[c] || 0}</td>`).join('')}
-    <td>${grandTotal}</td>
-  </tr></tfoot>
-  </table></div>`;
+  tbl += `</tbody><tfoot><tr>
+    <td>HOTEL TOTAL</td>
+    <td>${h.phys||0}</td><td>${h.ooo||0}</td><td>${h.inv||0}</td>
+    <td>${h.overbk||0}</td><td>${h.reserved||0}</td><td>${avail}</td>
+  </tr></tfoot></table>`;
 
-  // Legenda categorias
-  html += `<div class="cat-legend">`;
-  categories.forEach(c => {
-    if (CATEGORY_NAMES[c]) {
-      html += `<div class="cat-item"><span class="cat-code">${c}</span><span class="cat-name">${CATEGORY_NAMES[c]}</span></div>`;
-    }
-  });
-  html += `</div>`;
-
-  document.getElementById('forecastContainer').innerHTML = html;
+  document.getElementById('dayTable').innerHTML = tbl;
 }
 
-// ─── Export Excel ─────────────────────────────────────────────────────────────
+// Excel
 document.getElementById('exportBtn').addEventListener('click', () => {
   if (!currentData) return;
-  const { categories, rows } = currentData;
+  const { dates, roomTypes, byDate, hotelByDate } = currentData;
   const wb = XLSX.utils.book_new();
 
-  const colTotals = {};
-  categories.forEach(c => colTotals[c] = 0);
-  rows.forEach(row => categories.forEach(c => { colTotals[c] += row.values[c] || 0; }));
-  const grandTotal = rows.reduce((s, r) => s + r.total, 0);
-  const maxTotal = Math.max(...rows.map(r => r.total), 1);
-
-  const ws1Data = [['Dia', ...categories, 'TOTAL DIA room type by day']];
-  rows.forEach(row => ws1Data.push([row.date, ...categories.map(c => row.values[c] || 0), row.total]));
-  ws1Data.push(['TOTAL TYPE', ...categories.map(c => colTotals[c] || 0), grandTotal]);
+  // Sheet 1: Room types nas linhas, datas nas colunas (Reserved)
+  const hdr = ['Room Type', 'Nome', ...dates];
+  const ws1Data = [hdr];
+  roomTypes.forEach(cat => {
+    ws1Data.push([cat, CATEGORY_NAMES[cat]||cat, ...dates.map(d => byDate[d]?.[cat]?.reserved||0)]);
+  });
+  const totRow = ['TOTAL', 'Hotel Availability', ...dates.map(d => hotelByDate[d]?.reserved||0)];
+  ws1Data.push(totRow);
 
   const ws1 = XLSX.utils.aoa_to_sheet(ws1Data);
+  const cols = [{wch:8},{wch:32}]; dates.forEach(()=>cols.push({wch:9}));
+  ws1['!cols'] = cols;
 
-  const wscols = [{ wch: 11 }];
-  categories.forEach(() => wscols.push({ wch: 7 }));
-  wscols.push({ wch: 26 });
-  ws1['!cols'] = wscols;
-
-  const thinBorder = {
-    top:    { style: 'thin', color: { rgb: 'E2DDD6' } },
-    bottom: { style: 'thin', color: { rgb: 'E2DDD6' } },
-    left:   { style: 'thin', color: { rgb: 'E2DDD6' } },
-    right:  { style: 'thin', color: { rgb: 'E2DDD6' } },
-  };
-  const thickLeft = { ...thinBorder, left: { style: 'medium', color: { rgb: 'C8C2B8' } } };
-
-  const colorMap = {
-    'c-high':    { bg: 'C0392B', fg: 'FFFFFF' },
-    'c-medhigh': { bg: 'E67E22', fg: 'FFFFFF' },
-    'c-med':     { bg: 'F39C12', fg: 'FFFFFF' },
-    'c-lowmed':  { bg: 'F1C40F', fg: '333333' },
-    'c-low':     { bg: '2ECC71', fg: 'FFFFFF' },
-    'c-verylow': { bg: '27AE60', fg: 'FFFFFF' },
-  };
-
+  const maxRes = Math.max(...dates.map(d=>hotelByDate[d]?.reserved||0),1);
   const range = XLSX.utils.decode_range(ws1['!ref']);
-  const totalCol = categories.length + 1;
 
-  // ── Cabeçalho (linha 0)
-  for (let c = 0; c <= totalCol; c++) {
-    const cell = ws1[XLSX.utils.encode_cell({ r: 0, c })];
-    if (!cell) continue;
-    cell.s = {
-      fill: { fgColor: { rgb: c === totalCol ? '162D4A' : '1E3A5F' } },
-      font: { color: { rgb: 'FFFFFF' }, bold: true, sz: 10, name: 'Arial' },
-      alignment: { horizontal: c === 0 ? 'left' : 'center', vertical: 'center', wrapText: c === totalCol },
-      border: { bottom: { style: 'medium', color: { rgb: 'C8A84B' } } }
-    };
+  // Cabeçalho
+  for (let c=0;c<=range.e.c;c++) {
+    const cell = ws1[XLSX.utils.encode_cell({r:0,c})];
+    if (cell) cell.s = { fill:{fgColor:{rgb:'1E3A5F'}}, font:{color:{rgb:'FFFFFF'},bold:true,sz:10,name:'Arial'}, alignment:{horizontal:c<=1?'left':'center',vertical:'center'} };
   }
-
-  // ── Linhas de dados
-  for (let r = 1; r <= rows.length; r++) {
-    const row = rows[r - 1];
-    const cc = colorClass(row.total, maxTotal);
-    const colors = colorMap[cc];
-    const rowBg = r % 2 === 0 ? 'F5F3EF' : 'FFFFFF';
-
-    // Coluna data
-    const dc = ws1[XLSX.utils.encode_cell({ r, c: 0 })];
-    if (dc) dc.s = {
-      fill: { fgColor: { rgb: 'F7F5F0' } },
-      font: { bold: true, sz: 10, name: 'Arial', color: { rgb: '4A4640' } },
-      alignment: { horizontal: 'left', vertical: 'center' },
-      border: { ...thinBorder, right: { style: 'medium', color: { rgb: 'C8C2B8' } } }
-    };
-
-    // Colunas de categoria
-    for (let c = 1; c <= categories.length; c++) {
-      const cell = ws1[XLSX.utils.encode_cell({ r, c })];
+  // Dados
+  for (let r=1;r<ws1Data.length-1;r++) {
+    const rowBg = r%2===0?'F5F3EF':'FFFFFF';
+    for (let c=0;c<=range.e.c;c++) {
+      const cell = ws1[XLSX.utils.encode_cell({r,c})];
       if (!cell) continue;
-      const v = cell.v;
-      cell.s = {
-        fill: { fgColor: { rgb: rowBg } },
-        font: { sz: 10, name: 'Arial', color: { rgb: v === 0 ? 'CCCCCC' : '1A1916' }, bold: v > 0 },
-        alignment: { horizontal: 'center', vertical: 'center' },
-        border: thinBorder
-      };
+      if (c===0) cell.s={fill:{fgColor:{rgb:'E6F0F8'}},font:{bold:true,sz:10,name:'Arial',color:{rgb:'1E3A5F'}},alignment:{horizontal:'center'}};
+      else if (c===1) cell.s={fill:{fgColor:{rgb:rowBg}},font:{sz:10,name:'Arial'},alignment:{horizontal:'left'}};
+      else { const v=cell.v||0; cell.s={fill:{fgColor:{rgb:rowBg}},font:{sz:10,name:'Arial',color:{rgb:v===0?'CCCCCC':'1A1916'},bold:v>0},alignment:{horizontal:'center'}}; }
     }
-
-    // Coluna total
-    const tc = ws1[XLSX.utils.encode_cell({ r, c: totalCol })];
-    if (tc) tc.s = {
-      fill: { fgColor: { rgb: colors.bg } },
-      font: { color: { rgb: colors.fg }, bold: true, sz: 11, name: 'Arial' },
-      alignment: { horizontal: 'center', vertical: 'center' },
-      border: thickLeft
-    };
   }
-
-  // ── Rodapé TOTAL TYPE
-  const fr = rows.length + 1;
-  for (let c = 0; c <= totalCol; c++) {
-    const cell = ws1[XLSX.utils.encode_cell({ r: fr, c })];
+  // Totais com cores
+  const fr = ws1Data.length-1;
+  for (let c=0;c<=range.e.c;c++) {
+    const cell = ws1[XLSX.utils.encode_cell({r:fr,c})];
     if (!cell) continue;
-    cell.s = {
-      fill: { fgColor: { rgb: c === totalCol ? '162D4A' : '1E3A5F' } },
-      font: { color: { rgb: 'FFFFFF' }, bold: true, sz: 10, name: 'Arial' },
-      alignment: { horizontal: c === 0 ? 'left' : 'center', vertical: 'center' },
-      border: { top: { style: 'medium', color: { rgb: 'C8A84B' } } }
-    };
+    let bg='1E3A5F',fg='FFFFFF';
+    if (c>=2) {
+      const p=(cell.v||0)/maxRes;
+      if(p>=0.90){bg='C0392B';}else if(p>=0.75){bg='E67E22';}else if(p>=0.60){bg='F39C12';}
+      else if(p>=0.45){bg='F1C40F';fg='333333';}else if(p>=0.25){bg='2ECC71';}else{bg='27AE60';}
+    }
+    cell.s={fill:{fgColor:{rgb:bg}},font:{color:{rgb:fg},bold:true,sz:10,name:'Arial'},alignment:{horizontal:c<=1?'left':'center'}};
   }
+  ws1['!rows']=[{hpt:24}];
+  XLSX.utils.book_append_sheet(wb,ws1,'Reserved por Room Type');
 
-  // ── Legenda à direita (começa na linha 7)
-  const legCol = totalCol + 2;
-  const legCats = categories.filter(c => CATEGORY_NAMES[c]);
-  legCats.forEach((cat, i) => {
-    const rr = i + 6;
-    ws1[XLSX.utils.encode_cell({ r: rr, c: legCol })] = {
-      v: cat, t: 's',
-      s: { fill: { fgColor: { rgb: 'E6F0F8' } }, font: { bold: true, sz: 10, name: 'Arial', color: { rgb: '1E3A5F' } }, alignment: { horizontal: 'center', vertical: 'center' }, border: thinBorder }
-    };
-    ws1[XLSX.utils.encode_cell({ r: rr, c: legCol + 1 })] = {
-      v: CATEGORY_NAMES[cat], t: 's',
-      s: { font: { sz: 10, name: 'Arial', color: { rgb: '4A4640' } }, alignment: { horizontal: 'left', vertical: 'center' }, border: thinBorder }
-    };
+  // Sheet 2: Disponíveis
+  const hdr2 = ['Room Type','Nome',...dates];
+  const ws2Data = [hdr2];
+  roomTypes.forEach(cat => {
+    ws2Data.push([cat,CATEGORY_NAMES[cat]||cat,...dates.map(d=>byDate[d]?.[cat]?.avail||0)]);
   });
-
-  // Ajustar ref do range para incluir legenda
-  ws1['!ref'] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: Math.max(rows.length + 1, legCats.length + 6), c: legCol + 1 } });
-  ws1['!cols'][legCol] = { wch: 8 };
-  ws1['!cols'][legCol + 1] = { wch: 38 };
-
-  // Altura das linhas
-  ws1['!rows'] = [{ hpt: 28 }];
-  for (let r = 1; r <= rows.length; r++) ws1['!rows'].push({ hpt: 18 });
-  ws1['!rows'].push({ hpt: 22 });
-
-  XLSX.utils.book_append_sheet(wb, ws1, 'Rooms on the Book by TYPE');
-
-  // Sheet 2 simples
-  const ws2Data = [['Data', ...categories, 'Total']];
-  rows.forEach(row => ws2Data.push([row.date, ...categories.map(c => row.values[c] || 0), row.total]));
-  ws2Data.push(['Total Arrivals', ...categories.map(c => colTotals[c] || 0), grandTotal]);
+  ws2Data.push(['TOTAL','Hotel Availability',...dates.map(d=>hotelByDate[d]?.avail||0)]);
   const ws2 = XLSX.utils.aoa_to_sheet(ws2Data);
-  ws2['!cols'] = wscols;
-  XLSX.utils.book_append_sheet(wb, ws2, 'Arrivals room type daily');
+  ws2['!cols'] = cols;
+  XLSX.utils.book_append_sheet(wb,ws2,'Disponíveis por Room Type');
 
-  const d1 = rows[0]?.date.replace(/\//g, '') || '';
-  const d2 = rows[rows.length-1]?.date.replace(/\//g, '') || '';
-  XLSX.writeFile(wb, `RoomForecast_${d1}_${d2}.xlsx`);
+  // Sheet 3: Detalhe completo
+  const ws3Data = [['Data','Room Type','Nome','Phys.','OOO','Inventário','Overbooking','Reservados','Disponíveis']];
+  dates.forEach(date => {
+    const dayData = byDate[date]||{};
+    roomTypes.forEach(cat => {
+      const d = dayData[cat]; if (!d) return;
+      ws3Data.push([date,cat,CATEGORY_NAMES[cat]||cat,d.phys,d.ooo,d.inv,d.overbk,d.reserved,d.avail]);
+    });
+    const h=hotelByDate[date]||{};
+    ws3Data.push([date,'TOTAL','Hotel Availability',h.phys||0,h.ooo||0,h.inv||0,h.overbk||0,h.reserved||0,h.avail||0]);
+    ws3Data.push([]);
+  });
+  const ws3=XLSX.utils.aoa_to_sheet(ws3Data);
+  ws3['!cols']=[{wch:10},{wch:8},{wch:32},{wch:6},{wch:6},{wch:10},{wch:12},{wch:11},{wch:12}];
+  XLSX.utils.book_append_sheet(wb,ws3,'Detalhe Completo');
+
+  const d1=dates[0].replace(/\//g,''), d2=dates[dates.length-1].replace(/\//g,'');
+  XLSX.writeFile(wb,`RoomForecast_${d1}_${d2}.xlsx`);
 });
 
-// ─── Status bar ───────────────────────────────────────────────────────────────
-function showStatus(msg, isError) {
-  const bar = document.getElementById('statusBar');
-  bar.textContent = msg;
-  bar.className = 'status-bar visible' + (isError ? ' error' : '');
-  if (!isError) setTimeout(() => bar.classList.remove('visible'), 7000);
-}
-
-// ─── Paleta de cores por categoria ───────────────────────────────────────────
-const CAT_COLORS = {
-  ELET:  '#1a6b9a', ELED:  '#2196a8', ELETC: '#26a69a', ELEDC: '#43b89c',
-  DELUXE:'#c8a84b', MASTER:'#e07b39', RV2:   '#7b5ea7', RV3:   '#9c6fb5',
-  STO:   '#2e7d32', STOC:  '#43a047', SDO:   '#66bb6a', SDOC:  '#a5d6a7',
-  ORV2:  '#c62828', RVP2:  '#e53935', RVP2M: '#ef9a9a', GRAND: '#6d4c41',
-  STG:   '#78909c', SC:    '#b0bec5', ONRA2: '#cfd8dc',
-};
-
-function getCatColor(cat) {
-  return CAT_COLORS[cat] || '#' + Math.floor(Math.abs(Math.sin(cat.charCodeAt(0)*99)*16777215)).toString(16).padStart(6,'0');
-}
-
-// ─── Gráfico PNG ──────────────────────────────────────────────────────────────
+// Gráfico PNG
 document.getElementById('chartBtn').addEventListener('click', () => {
   if (!currentData) return;
-  const { categories, rows } = currentData;
+  const { dates, roomTypes, byDate, hotelByDate } = currentData;
 
-  const LEGEND_H = Math.ceil(categories.length / 4) * 24 + 16;
-  const W = Math.max(1400, rows.length * 42 + 160);
-  const H = 520 + LEGEND_H;
+  const LEG_COLS=3, LEG_ROWS=Math.ceil(roomTypes.length/LEG_COLS), LEG_H=LEG_ROWS*22+24;
+  const W=Math.max(1400,dates.length*44+160), H=560+LEG_H;
+  const canvas=document.getElementById('chartCanvas');
+  canvas.width=W; canvas.height=H;
+  const ctx=canvas.getContext('2d');
 
-  const canvas = document.getElementById('chartCanvas');
-  canvas.width = W;
-  canvas.height = H;
-  canvas.style.display = 'none';
-  const ctx = canvas.getContext('2d');
+  ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,W,H);
 
-  // Fundo branco
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, W, H);
+  const PL=60,PR=20,PT=55,PB=80+LEG_H;
+  const cW=W-PL-PR, cH=H-PT-PB;
+  const yMax=Math.ceil(Math.max(...dates.map(d=>hotelByDate[d]?.reserved||0),1)/10)*10;
+  const gap=Math.floor(cW/dates.length), barW=Math.max(16,gap-6);
 
-  const PAD_LEFT = 55, PAD_RIGHT = 20, PAD_TOP = 55, PAD_BOTTOM = 80 + LEGEND_H;
-  const chartW = W - PAD_LEFT - PAD_RIGHT;
-  const chartH = H - PAD_TOP - PAD_BOTTOM;
+  // Título
+  ctx.fillStyle='#1e3a5f'; ctx.font='bold 15px Arial'; ctx.textAlign='center';
+  ctx.fillText('Room Type Forecast — Quartos Reservados por Dia e Categoria', W/2, 34);
 
-  const maxVal = Math.max(...rows.map(r => r.total), 1);
-  // Arredondar maxVal para cima para múltiplo de 10
-  const yMax = Math.ceil(maxVal / 10) * 10;
-
-  const gap = Math.floor(chartW / rows.length);
-  const barW = Math.max(16, gap - 6);
-
-  // ── Título
-  ctx.fillStyle = '#1e3a5f';
-  ctx.font = 'bold 15px Arial';
-  ctx.textAlign = 'center';
-  ctx.fillText('Room Forecast — Chegadas por Categoria e Dia', W / 2, 34);
-
-  // ── Linhas de grade e eixo Y
-  const gridLines = 6;
-  for (let i = 0; i <= gridLines; i++) {
-    const val = Math.round(yMax * i / gridLines);
-    const y = PAD_TOP + chartH - (chartH * i / gridLines);
-    ctx.strokeStyle = i === 0 ? '#c8c2b8' : '#ece8e2';
-    ctx.lineWidth = i === 0 ? 1.5 : 0.8;
-    ctx.beginPath(); ctx.moveTo(PAD_LEFT, y); ctx.lineTo(W - PAD_RIGHT, y); ctx.stroke();
-    ctx.fillStyle = '#888';
-    ctx.font = '11px Arial';
-    ctx.textAlign = 'right';
-    ctx.fillText(val, PAD_LEFT - 6, y + 4);
+  // Grid
+  for (let i=0;i<=6;i++) {
+    const val=Math.round(yMax*i/6), y=PT+cH-(cH*i/6);
+    ctx.strokeStyle=i===0?'#c8c2b8':'#ece8e2'; ctx.lineWidth=i===0?1.5:0.7;
+    ctx.beginPath(); ctx.moveTo(PL,y); ctx.lineTo(W-PR,y); ctx.stroke();
+    ctx.fillStyle='#888'; ctx.font='11px Arial'; ctx.textAlign='right';
+    ctx.fillText(val,PL-6,y+4);
   }
 
-  // ── Barras empilhadas
-  rows.forEach((row, i) => {
-    const x = PAD_LEFT + i * gap + (gap - barW) / 2;
-    let stackY = PAD_TOP + chartH; // começa do fundo
+  // Barras empilhadas
+  dates.forEach((date,i) => {
+    const dayData=byDate[date]||{};
+    const x=PL+i*gap+(gap-barW)/2;
+    let stackY=PT+cH;
 
-    categories.forEach(cat => {
-      const v = row.values[cat] || 0;
-      if (v === 0) return;
-      const segH = Math.round((v / yMax) * chartH);
-      stackY -= segH;
-      ctx.fillStyle = getCatColor(cat);
-      ctx.fillRect(x, stackY, barW, segH);
-      // Linha separadora entre segmentos
-      ctx.strokeStyle = 'rgba(255,255,255,0.4)';
-      ctx.lineWidth = 0.5;
-      ctx.strokeRect(x, stackY, barW, segH);
+    roomTypes.forEach(cat => {
+      const v=dayData[cat]?.reserved||0; if(!v) return;
+      const segH=Math.round((v/yMax)*cH);
+      stackY-=segH;
+      ctx.fillStyle=CAT_COLORS[cat]||'#90a4ae';
+      ctx.fillRect(x,stackY,barW,segH);
+
+      // Número dentro do segmento
+      if (segH>=14 && barW>=24) {
+        ctx.fillStyle='rgba(255,255,255,0.92)';
+        ctx.font=`bold ${Math.min(10,barW/3.5)}px Arial`;
+        ctx.textAlign='center';
+        ctx.fillText(v, x+barW/2, stackY+segH/2+4);
+      }
+      ctx.strokeStyle='rgba(255,255,255,0.3)'; ctx.lineWidth=0.5;
+      ctx.strokeRect(x,stackY,barW,segH);
     });
 
-    // Total em cima da barra
-    const totalBarH = Math.round((row.total / yMax) * chartH);
-    const topY = PAD_TOP + chartH - totalBarH;
-    ctx.fillStyle = '#1a1916';
-    ctx.font = 'bold 10px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText(row.total, x + barW / 2, topY - 4);
+    // Total em cima
+    const total=hotelByDate[date]?.reserved||0;
+    const totalH=Math.round((total/yMax)*cH);
+    ctx.fillStyle='#1a1916'; ctx.font='bold 10px Arial'; ctx.textAlign='center';
+    ctx.fillText(total, x+barW/2, PT+cH-totalH-5);
 
-    // Data em baixo (rotacionada)
+    // Data em baixo
     ctx.save();
-    ctx.translate(x + barW / 2, PAD_TOP + chartH + 10);
-    ctx.rotate(-Math.PI / 3.5);
-    ctx.fillStyle = '#6b6860';
-    ctx.font = '10px Arial';
-    ctx.textAlign = 'right';
-    ctx.fillText(row.date, 0, 0);
+    ctx.translate(x+barW/2, PT+cH+10);
+    ctx.rotate(-Math.PI/3.5);
+    ctx.fillStyle='#6b6860'; ctx.font='10px Arial'; ctx.textAlign='right';
+    ctx.fillText(date,0,0);
     ctx.restore();
   });
 
-  // ── Legenda em baixo
-  const legX0 = PAD_LEFT;
-  const legY0 = H - LEGEND_H + 8;
-  const colWidth = Math.floor((W - PAD_LEFT - PAD_RIGHT) / 4);
+  // Linha separadora legenda
+  ctx.strokeStyle='#e2ddd6'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(PL,H-LEG_H+2); ctx.lineTo(W-PR,H-LEG_H+2); ctx.stroke();
 
-  categories.forEach((cat, i) => {
-    const col = i % 4;
-    const row2 = Math.floor(i / 4);
-    const lx = legX0 + col * colWidth;
-    const ly = legY0 + row2 * 22;
-
-    ctx.fillStyle = getCatColor(cat);
-    ctx.fillRect(lx, ly, 14, 14);
-    ctx.strokeStyle = 'rgba(0,0,0,0.1)';
-    ctx.lineWidth = 0.5;
-    ctx.strokeRect(lx, ly, 14, 14);
-
-    ctx.fillStyle = '#333';
-    ctx.font = '11px Arial';
-    ctx.textAlign = 'left';
-    const name = CATEGORY_NAMES[cat] ? `${cat} — ${CATEGORY_NAMES[cat]}` : cat;
-    ctx.fillText(name, lx + 18, ly + 11);
+  // Legenda
+  const legColW=Math.floor((W-PL-PR)/LEG_COLS);
+  roomTypes.forEach((cat,i) => {
+    const col=i%LEG_COLS, row=Math.floor(i/LEG_COLS);
+    const lx=PL+col*legColW, ly=H-LEG_H+12+row*22;
+    ctx.fillStyle=CAT_COLORS[cat]||'#90a4ae';
+    ctx.fillRect(lx,ly,13,13);
+    ctx.strokeStyle='rgba(0,0,0,0.1)'; ctx.lineWidth=0.5; ctx.strokeRect(lx,ly,13,13);
+    ctx.fillStyle='#333'; ctx.font='11px Arial'; ctx.textAlign='left';
+    ctx.fillText(`${cat} — ${CATEGORY_NAMES[cat]||cat}`, lx+17, ly+10);
   });
 
-  // ── Linha separadora legenda
-  ctx.strokeStyle = '#e2ddd6';
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(PAD_LEFT, H - LEGEND_H + 2);
-  ctx.lineTo(W - PAD_RIGHT, H - LEGEND_H + 2);
-  ctx.stroke();
-
-  // Download PNG
-  const link = document.createElement('a');
-  const firstDate = rows[0]?.date.replace(/\//g, '') || '';
-  const lastDate = rows[rows.length-1]?.date.replace(/\//g, '') || '';
-  link.download = `RoomForecast_Grafico_${firstDate}_${lastDate}.png`;
-  link.href = canvas.toDataURL('image/png');
+  const link=document.createElement('a');
+  const d1=dates[0].replace(/\//g,''), d2=dates[dates.length-1].replace(/\//g,'');
+  link.download=`RoomForecast_Grafico_${d1}_${d2}.png`;
+  link.href=canvas.toDataURL('image/png');
   link.click();
 });
+
+// Status
+function showStatus(msg,isErr) {
+  const el=document.getElementById('statusBar');
+  el.textContent=msg; el.className='status '+(isErr?'err':'ok');
+  if (!isErr) setTimeout(()=>el.className='status',6000);
+}
 </script>
 </body>
 </html>
