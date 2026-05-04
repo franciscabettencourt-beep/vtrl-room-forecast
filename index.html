@@ -206,8 +206,13 @@
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
         Exportar Excel
       </button>
+      <button class="btn btn-secondary" id="chartBtn" style="display:none">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        Guardar Gráfico PNG
+      </button>
     </div>
   </div>
+  <canvas id="chartCanvas" style="display:none"></canvas>
 
   <div class="status-bar" id="statusBar"></div>
 
@@ -389,6 +394,7 @@ function process(content, sourceName) {
   }
   currentData = data;
   document.getElementById('exportBtn').style.display = '';
+  document.getElementById('chartBtn').style.display = '';
   renderTable(data);
   showStatus(`✓ ${data.rows.length} dias carregados · ${data.categories.length} categorias · fonte: "${sourceName}"`);
 }
@@ -483,7 +489,6 @@ document.getElementById('exportBtn').addEventListener('click', () => {
   const { categories, rows } = currentData;
   const wb = XLSX.utils.book_new();
 
-  // Sheet 1
   const colTotals = {};
   categories.forEach(c => colTotals[c] = 0);
   rows.forEach(row => categories.forEach(c => { colTotals[c] += row.values[c] || 0; }));
@@ -495,24 +500,20 @@ document.getElementById('exportBtn').addEventListener('click', () => {
   ws1Data.push(['TOTAL TYPE', ...categories.map(c => colTotals[c] || 0), grandTotal]);
 
   const ws1 = XLSX.utils.aoa_to_sheet(ws1Data);
+
   const wscols = [{ wch: 11 }];
   categories.forEach(() => wscols.push({ wch: 7 }));
   wscols.push({ wch: 26 });
   ws1['!cols'] = wscols;
 
-  const range = XLSX.utils.decode_range(ws1['!ref']);
+  const thinBorder = {
+    top:    { style: 'thin', color: { rgb: 'E2DDD6' } },
+    bottom: { style: 'thin', color: { rgb: 'E2DDD6' } },
+    left:   { style: 'thin', color: { rgb: 'E2DDD6' } },
+    right:  { style: 'thin', color: { rgb: 'E2DDD6' } },
+  };
+  const thickLeft = { ...thinBorder, left: { style: 'medium', color: { rgb: 'C8C2B8' } } };
 
-  // Estilo cabeçalho
-  for (let c = range.s.c; c <= range.e.c; c++) {
-    const cell = ws1[XLSX.utils.encode_cell({ r: 0, c })];
-    if (cell) cell.s = {
-      fill: { fgColor: { rgb: c === range.e.c ? '162D4A' : '1E3A5F' } },
-      font: { color: { rgb: 'FFFFFF' }, bold: true, sz: 10, name: 'Arial' },
-      alignment: { horizontal: c === 0 ? 'left' : 'center', vertical: 'center' }
-    };
-  }
-
-  // Estilo dados
   const colorMap = {
     'c-high':    { bg: 'C0392B', fg: 'FFFFFF' },
     'c-medhigh': { bg: 'E67E22', fg: 'FFFFFF' },
@@ -522,52 +523,97 @@ document.getElementById('exportBtn').addEventListener('click', () => {
     'c-verylow': { bg: '27AE60', fg: 'FFFFFF' },
   };
 
+  const range = XLSX.utils.decode_range(ws1['!ref']);
+  const totalCol = categories.length + 1;
+
+  // ── Cabeçalho (linha 0)
+  for (let c = 0; c <= totalCol; c++) {
+    const cell = ws1[XLSX.utils.encode_cell({ r: 0, c })];
+    if (!cell) continue;
+    cell.s = {
+      fill: { fgColor: { rgb: c === totalCol ? '162D4A' : '1E3A5F' } },
+      font: { color: { rgb: 'FFFFFF' }, bold: true, sz: 10, name: 'Arial' },
+      alignment: { horizontal: c === 0 ? 'left' : 'center', vertical: 'center', wrapText: c === totalCol },
+      border: { bottom: { style: 'medium', color: { rgb: 'C8A84B' } } }
+    };
+  }
+
+  // ── Linhas de dados
   for (let r = 1; r <= rows.length; r++) {
     const row = rows[r - 1];
     const cc = colorClass(row.total, maxTotal);
     const colors = colorMap[cc];
-    const rowBg = r % 2 === 0 ? 'FAFAF8' : 'FFFFFF';
+    const rowBg = r % 2 === 0 ? 'F5F3EF' : 'FFFFFF';
 
-    // Data
+    // Coluna data
     const dc = ws1[XLSX.utils.encode_cell({ r, c: 0 })];
-    if (dc) dc.s = { fill: { fgColor: { rgb: 'F7F5F0' } }, font: { bold: true, sz: 10, name: 'Arial' }, alignment: { horizontal: 'left' } };
+    if (dc) dc.s = {
+      fill: { fgColor: { rgb: 'F7F5F0' } },
+      font: { bold: true, sz: 10, name: 'Arial', color: { rgb: '4A4640' } },
+      alignment: { horizontal: 'left', vertical: 'center' },
+      border: { ...thinBorder, right: { style: 'medium', color: { rgb: 'C8C2B8' } } }
+    };
 
-    // Valores
+    // Colunas de categoria
     for (let c = 1; c <= categories.length; c++) {
       const cell = ws1[XLSX.utils.encode_cell({ r, c })];
-      if (cell) cell.s = { fill: { fgColor: { rgb: rowBg } }, font: { sz: 10, name: 'Arial' }, alignment: { horizontal: 'center' } };
+      if (!cell) continue;
+      const v = cell.v;
+      cell.s = {
+        fill: { fgColor: { rgb: rowBg } },
+        font: { sz: 10, name: 'Arial', color: { rgb: v === 0 ? 'CCCCCC' : '1A1916' }, bold: v > 0 },
+        alignment: { horizontal: 'center', vertical: 'center' },
+        border: thinBorder
+      };
     }
 
-    // Total
-    const tc = ws1[XLSX.utils.encode_cell({ r, c: categories.length + 1 })];
-    if (tc) tc.s = { fill: { fgColor: { rgb: colors.bg } }, font: { color: { rgb: colors.fg }, bold: true, sz: 10, name: 'Arial' }, alignment: { horizontal: 'center' } };
-  }
-
-  // Rodapé
-  const fr = rows.length + 1;
-  for (let c = range.s.c; c <= range.e.c; c++) {
-    const cell = ws1[XLSX.utils.encode_cell({ r: fr, c })];
-    if (cell) cell.s = {
-      fill: { fgColor: { rgb: c === range.e.c ? '162D4A' : '1E3A5F' } },
-      font: { color: { rgb: 'FFFFFF' }, bold: true, sz: 10, name: 'Arial' },
-      alignment: { horizontal: c === 0 ? 'left' : 'center' }
+    // Coluna total
+    const tc = ws1[XLSX.utils.encode_cell({ r, c: totalCol })];
+    if (tc) tc.s = {
+      fill: { fgColor: { rgb: colors.bg } },
+      font: { color: { rgb: colors.fg }, bold: true, sz: 11, name: 'Arial' },
+      alignment: { horizontal: 'center', vertical: 'center' },
+      border: thickLeft
     };
   }
 
-  // Legenda à direita
-  const legCol = categories.length + 3;
-  categories.filter(c => CATEGORY_NAMES[c]).forEach((cat, i) => {
-    const rr = i + 7;
-    const cc = ws1[XLSX.utils.encode_cell({ r: rr, c: legCol })] || { t: 's' };
-    cc.v = cat; cc.t = 's';
-    cc.s = { fill: { fgColor: { rgb: 'E6F0F8' } }, font: { bold: true, sz: 10, name: 'Arial', color: { rgb: '1E3A5F' } }, alignment: { horizontal: 'center' } };
-    ws1[XLSX.utils.encode_cell({ r: rr, c: legCol })] = cc;
-    const nc = { v: CATEGORY_NAMES[cat], t: 's', s: { font: { sz: 10, name: 'Arial' }, alignment: { horizontal: 'left' } } };
-    ws1[XLSX.utils.encode_cell({ r: rr, c: legCol + 1 })] = nc;
+  // ── Rodapé TOTAL TYPE
+  const fr = rows.length + 1;
+  for (let c = 0; c <= totalCol; c++) {
+    const cell = ws1[XLSX.utils.encode_cell({ r: fr, c })];
+    if (!cell) continue;
+    cell.s = {
+      fill: { fgColor: { rgb: c === totalCol ? '162D4A' : '1E3A5F' } },
+      font: { color: { rgb: 'FFFFFF' }, bold: true, sz: 10, name: 'Arial' },
+      alignment: { horizontal: c === 0 ? 'left' : 'center', vertical: 'center' },
+      border: { top: { style: 'medium', color: { rgb: 'C8A84B' } } }
+    };
+  }
+
+  // ── Legenda à direita (começa na linha 7)
+  const legCol = totalCol + 2;
+  const legCats = categories.filter(c => CATEGORY_NAMES[c]);
+  legCats.forEach((cat, i) => {
+    const rr = i + 6;
+    ws1[XLSX.utils.encode_cell({ r: rr, c: legCol })] = {
+      v: cat, t: 's',
+      s: { fill: { fgColor: { rgb: 'E6F0F8' } }, font: { bold: true, sz: 10, name: 'Arial', color: { rgb: '1E3A5F' } }, alignment: { horizontal: 'center', vertical: 'center' }, border: thinBorder }
+    };
+    ws1[XLSX.utils.encode_cell({ r: rr, c: legCol + 1 })] = {
+      v: CATEGORY_NAMES[cat], t: 's',
+      s: { font: { sz: 10, name: 'Arial', color: { rgb: '4A4640' } }, alignment: { horizontal: 'left', vertical: 'center' }, border: thinBorder }
+    };
   });
-  if (!ws1['!cols']) ws1['!cols'] = wscols;
+
+  // Ajustar ref do range para incluir legenda
+  ws1['!ref'] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: Math.max(rows.length + 1, legCats.length + 6), c: legCol + 1 } });
   ws1['!cols'][legCol] = { wch: 8 };
   ws1['!cols'][legCol + 1] = { wch: 38 };
+
+  // Altura das linhas
+  ws1['!rows'] = [{ hpt: 28 }];
+  for (let r = 1; r <= rows.length; r++) ws1['!rows'].push({ hpt: 18 });
+  ws1['!rows'].push({ hpt: 22 });
 
   XLSX.utils.book_append_sheet(wb, ws1, 'Rooms on the Book by TYPE');
 
@@ -591,6 +637,115 @@ function showStatus(msg, isError) {
   bar.className = 'status-bar visible' + (isError ? ' error' : '');
   if (!isError) setTimeout(() => bar.classList.remove('visible'), 7000);
 }
+
+// ─── Gráfico PNG ──────────────────────────────────────────────────────────────
+let chartInstance = null;
+
+document.getElementById('chartBtn').addEventListener('click', () => {
+  if (!currentData) return;
+  const { rows } = currentData;
+
+  const W = Math.max(1200, rows.length * 36 + 200);
+  const H = 480;
+  const canvas = document.getElementById('chartCanvas');
+  canvas.width = W;
+  canvas.height = H;
+  canvas.style.display = 'none';
+  const ctx = canvas.getContext('2d');
+
+  // Background branco
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, W, H);
+
+  const PAD_LEFT = 60, PAD_RIGHT = 30, PAD_TOP = 60, PAD_BOTTOM = 80;
+  const chartW = W - PAD_LEFT - PAD_RIGHT;
+  const chartH = H - PAD_TOP - PAD_BOTTOM;
+
+  const maxVal = Math.max(...rows.map(r => r.total), 1);
+  const barW = Math.max(18, Math.floor(chartW / rows.length) - 4);
+  const gap = Math.floor(chartW / rows.length);
+
+  // Título
+  ctx.fillStyle = '#1e3a5f';
+  ctx.font = 'bold 16px Segoe UI, Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('Room Forecast — Total Chegadas por Dia', W / 2, 36);
+
+  // Linhas de grade
+  ctx.strokeStyle = '#e8e4df';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 5; i++) {
+    const y = PAD_TOP + chartH - (chartH * i / 5);
+    ctx.beginPath(); ctx.moveTo(PAD_LEFT, y); ctx.lineTo(W - PAD_RIGHT, y); ctx.stroke();
+    ctx.fillStyle = '#9a9690';
+    ctx.font = '11px Segoe UI, Arial';
+    ctx.textAlign = 'right';
+    ctx.fillText(Math.round(maxVal * i / 5), PAD_LEFT - 8, y + 4);
+  }
+
+  // Barras
+  const colorStops = [
+    [0.90, '#c0392b'],
+    [0.75, '#e67e22'],
+    [0.60, '#f39c12'],
+    [0.45, '#f1c40f'],
+    [0.25, '#2ecc71'],
+    [0.00, '#27ae60'],
+  ];
+
+  function barColor(val) {
+    const p = val / maxVal;
+    for (const [thresh, col] of colorStops) {
+      if (p >= thresh) return col;
+    }
+    return '#27ae60';
+  }
+
+  rows.forEach((row, i) => {
+    const x = PAD_LEFT + i * gap + (gap - barW) / 2;
+    const barH = Math.round((row.total / maxVal) * chartH);
+    const y = PAD_TOP + chartH - barH;
+
+    ctx.fillStyle = barColor(row.total);
+    ctx.beginPath();
+    ctx.roundRect ? ctx.roundRect(x, y, barW, barH, [3, 3, 0, 0]) : ctx.rect(x, y, barW, barH);
+    ctx.fill();
+
+    // Valor em cima
+    if (barW >= 20) {
+      ctx.fillStyle = '#1a1916';
+      ctx.font = 'bold 10px Segoe UI, Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText(row.total, x + barW / 2, y - 4);
+    }
+
+    // Data em baixo (rotacionada)
+    ctx.save();
+    ctx.translate(x + barW / 2, PAD_TOP + chartH + 12);
+    ctx.rotate(-Math.PI / 4);
+    ctx.fillStyle = '#6b6860';
+    ctx.font = '10px Segoe UI, Arial';
+    ctx.textAlign = 'right';
+    ctx.fillText(row.date, 0, 0);
+    ctx.restore();
+  });
+
+  // Eixo X
+  ctx.strokeStyle = '#c8c2b8';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(PAD_LEFT, PAD_TOP + chartH);
+  ctx.lineTo(W - PAD_RIGHT, PAD_TOP + chartH);
+  ctx.stroke();
+
+  // Download PNG
+  const link = document.createElement('a');
+  const firstDate = rows[0]?.date.replace(/\//g, '') || '';
+  const lastDate = rows[rows.length-1]?.date.replace(/\//g, '') || '';
+  link.download = `RoomForecast_Grafico_${firstDate}_${lastDate}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+});
 </script>
 </body>
 </html>
